@@ -1,6 +1,6 @@
 const {email} = require('./../../Template');
 
-module.exprts.createMailTemplate = function(type) {
+module.exports.createMailTemplate = function(type) {
     switch(type) {
         case 'ACTIVE': 
             return email.activateMail;

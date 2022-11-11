@@ -1,5 +1,6 @@
 const { ValidateSignature } = require('./../Utils');
 const { status } = require('./../Constant');
+const {userRepository} = require('./../Database');
 
 const authorizationMDW = {
     checkUser: (req, res, next)=>{
@@ -7,11 +8,18 @@ const authorizationMDW = {
         try {
             const isAuthentication = ValidateSignature(req);
     
-            if(!isAuthentication) return res.status(status.UN_AUTHENTICATE).json("your token is valid!");
+            if(!isAuthentication) {
+                return res.status(status.UN_AUTHENTICATE).json({
+                    message: 'your token is valid',
+                    data: null
+                })
+            };
     
             next();
         } catch(err) {
-            res.status(status.UN_AUTHORIZED).json(err);
+            res.status(status.UN_AUTHORIZED).json({
+                message: err.message
+            });
         }
 
     },
@@ -19,12 +27,29 @@ const authorizationMDW = {
         try {
             const isAuthentication = ValidateSignature(req);
     
-            if(!isAuthentication) return res.status(status.UN_AUTHENTICATE).json("your token is valid!");
+            if(!isAuthentication) {
+                return res.status(status.UN_AUTHENTICATE).json({
+                    message: 'your token is valid',
+                    data: null
+                })
+            };
     
-            const { listOfPermissions } = req.user;
+            const { _id } = req.user;
 
-            if(!listOfPermissions.some((e)=>{
-                //handle pre-process
+            const user = await userRepository.findUserById(_id);
+
+            if(!user) {
+                return res.status(status.UN_AUTHENTICATE).json({
+                    message: 'user does not exist',
+                    data: null
+                })
+            }
+
+            const {role} = await user.populate('role');
+            const {permissions} = await role.populate('permissions');
+            console.log(permissions);
+
+            if(!permissions.some((e)=>{
                 let url = e.code;
                 if(req.params) {
                     const params = req.params;
@@ -45,13 +70,18 @@ const authorizationMDW = {
                         symbol = '&';
                     })
                 }
+                console.log(req.url);
                 return req.url === url;
             })) {
-                return res.status(status.UN_AUTHORIZED).json("you're not permission!");
+                return res.status(status.UN_AUTHORIZED).json({
+                    message: 'you are not permission'
+                });
             }
             next();
-        } catch(error) {
-            res.status(status.UN_AUTHORIZED).json(error);
+        } catch(err) {
+            res.status(status.UN_AUTHORIZED).json({
+                message: err.message
+            });
         }
     }
 }

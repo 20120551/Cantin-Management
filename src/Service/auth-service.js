@@ -27,20 +27,22 @@ const authService = {
 
             //check username
             if(!user) {
-                throw new Error({
-                    message: 'user does not exist',
-                    status: status.NOT_FOUND
+                throw new Error('user does not exist', {
+                    cause: status.NOT_FOUND
                 });
             }
 
             const validPassword = await ValidatePassword(password, user.password);
             //check password
             if(!validPassword) {
-                throw new Error({
-                    message: 'incorrect password',
-                    status: status.BAD_REQUEST
-                })
+                throw new Error('incorrect password', {
+                    cause: status.BAD_REQUEST
+                });
             }
+
+            // cập nhật trạng thái đang hoạt động
+            await userRepository.updateStateById(user._id, true);
+            user.status = true;
 
             //lấy thông tin user, gắn vào token
             const {password: _password, ...payload} = user._doc;
@@ -48,7 +50,7 @@ const authService = {
             //create token
             const token = GenerateToken(payload, ACCESS_TOKEN);
             
-            return FormatData({payload, token});
+            return FormatData({payload, accessToken: token});
         } catch(err) {
             throw err;
         }
@@ -60,17 +62,17 @@ const authService = {
 
             //check username
             if(!user) {
-                throw new Error({
-                    message: 'user does not exist',
-                    status: status.NOT_FOUND
+                throw new Error('user does not exist', {
+                    cause: status.NOT_FOUND
                 });
             }
 
-            const secretKey = await sendOtpThroughMail(username, 'CHANGE_PASS_WORD');
+            const emailPayload = {email: username};
+            const secretKey = await sendOtpThroughMail(emailPayload, 'CHANGE_PASS_WORD');
 
             const {password, _id, ...payload} = user._doc;
             //create token
-            const secretKeyToken = GenerateToken({secretKey, _id}, MAIL_EXCHANGE_TOKEN, '10m');
+            const secretKeyToken = GenerateToken({secretKey, _id}, MAIL_TOKEN, '10m');
 
             //return
             return FormatData({secretKeyToken});
@@ -86,9 +88,8 @@ const authService = {
             const isCorrectKey = await verifyMailOtp(key, secretKey);
 
             if (!isCorrectKey) {
-                throw new Error({
-                    message: 'Your key was not correct, please check your email again',
-                    status: status.UN_AUTHENTICATE
+                throw new Error('Your key was not correct, please check your email again', {
+                    cause: status.UN_AUTHENTICATE
                 })
             }
             //confirm otp key for _id

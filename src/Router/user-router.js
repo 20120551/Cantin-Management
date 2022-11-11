@@ -1,15 +1,15 @@
 const express = require('express');
 const {UserController} = require('./../Controller');
+const {authorizationMDW} = require('./../Middleware');
 
 const router = express.Router();
 const userController = new UserController();
 
 // add middleware check is user
-
-router.post('/signup', userController.signUp);
-router.put('/change-password', userController.sendOtpForChangingPassword);
-router.post('/change-password', userController.vertifyOtpForChangingPassword);
-router.put('/change-profile', userController.changeProfile);
-router.post('/logout', userController.logout);
+router.post('/signup', authorizationMDW.checkPermission, userController.signUp);
+router.put('/change-password', authorizationMDW.checkUser, userController.sendOtpForChangingPassword);
+router.post('/change-password', authorizationMDW.checkUser, userController.vertifyOtpForChangingPassword);
+router.post('/change-profile', authorizationMDW.checkUser, userController.updateProfile);
+router.post('/logout', authorizationMDW.checkUser, userController.logout);
 
 module.exports = router;

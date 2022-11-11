@@ -36,8 +36,8 @@ class AuthController {
             });
 
             res.status(status.OK).json({
-                message: `key to active ${secretKeyToken}`,
-                data: null
+                message: `Let's verify the key that sent to your email`,
+                data: secretKeyToken
             });
         } catch(err) {
             next(err);
@@ -63,7 +63,7 @@ class AuthController {
             
             res.status(status.OK).json({
                 message: 'verify otp key successfully',
-                data: null,
+                data: userIdToken,
             });
         } catch(err) {
             next(err);

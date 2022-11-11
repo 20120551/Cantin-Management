@@ -3,5 +3,7 @@ module.exports = {
     MONGO_CONNECTION_STRING: process.env.MONGO_CONNECTION_STRING,
     ACCESS_TOKEN: process.env.ACCESS_TOKEN,
     MAIL_TOKEN: process.env.MAIL_TOKEN,
-    USER_TOKEN: process.env.USER_TOKEN
+    USER_TOKEN: process.env.USER_TOKEN,
+    MAIL_DOMAIN: process.env.MAIL_DOMAIN,
+    MAIL_PASSWORD: process.env.MAIL_PASSWORD,
 }

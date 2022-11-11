@@ -1,3 +1,4 @@
+const {status} = require('./../../Constant');
 const {User} = require('./../Model');
 
 const userRepository = {
@@ -45,6 +46,36 @@ const userRepository = {
             throw err;
         }
     },
+    updateProfileByUserId: async(_id, updateData)=>{
+        try {
+            const user = await User.findById({_id: _id}).populate('userType');
+            if (!user) {
+                throw new Error({
+                    message: 'user does not exist',
+                    status: status.NOT_FOUND
+                })
+            }
+
+            // deep copy
+            Object.assign(user.userType, updateData);
+
+            const result = await user.userType.save();
+            return result;
+        } catch(err) {
+            throw err;
+        }
+    },
+    updateStateById: async(_id, status)=>{
+        try {
+            await User.updateOne({_id: _id}, {
+                $set: {
+                    status: status
+                }
+            })
+        } catch(err) {
+            throw err;
+        }
+    }
 }
 
 module.exports = userRepository;

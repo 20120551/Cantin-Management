@@ -1,3 +1,3 @@
 module.exports = {
-    email:  require('./mail-template'),
+    email: require('./mail-template'),
 }

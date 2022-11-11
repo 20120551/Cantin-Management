@@ -3,6 +3,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const router = require('./src/Router');
+const {errorHandlingMDW} = require('./src/Middleware');
 const {connectToMongoDb} = require('./src/Database');
 
 // thêm 1 vài middleware pipeline ở đây
@@ -25,4 +26,7 @@ module.exports = async function(app) {
     
     // khởi tạo router
     router(app);
+
+    // khởi tạo middleware handle lỗi
+    app.use(errorHandlingMDW.handleErrorOccurAfterRequest);
 }
