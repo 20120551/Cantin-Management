@@ -1,0 +1,117 @@
+// import user-repository here
+const {status} = require('./../Constant');
+const {userRepository} = require('./../Database');
+const {
+    GenerateSalt, 
+    GeneratePassword,
+    ValidatePassword,
+    GenerateToken,
+    VerifyToken,
+    FormatData,
+    sendOtpThroughMail,
+    verifyMailOtp
+} = require('./../Utils');
+
+const {
+    MAIL_TOKEN,
+    USER_TOKEN,
+    ACCESS_TOKEN
+} = require('./../Config');
+
+const authService = {
+    // [POST] /api/v1/auth/login
+    login: async(username, password) => {
+        try {
+            //check username has existed
+            const user = await userRepository.findUserByUsername(username);
+
+            //check username
+            if(!user) {
+                throw new Error({
+                    message: 'user does not exist',
+                    status: status.NOT_FOUND
+                });
+            }
+
+            const validPassword = await ValidatePassword(password, user.password);
+            //check password
+            if(!validPassword) {
+                throw new Error({
+                    message: 'incorrect password',
+                    status: status.BAD_REQUEST
+                })
+            }
+
+            //lấy thông tin user, gắn vào token
+            const {password: _password, ...payload} = user._doc;
+                    
+            //create token
+            const token = GenerateToken(payload, ACCESS_TOKEN);
+            
+            return FormatData({payload, token});
+        } catch(err) {
+            throw err;
+        }
+    },
+    // [PUT] /api/v1/auth/forgot-password
+    sendOtpForForgetingPassword: async(username) => {
+        try {
+            const user = await userRepository.findUserByUsername(username);
+
+            //check username
+            if(!user) {
+                throw new Error({
+                    message: 'user does not exist',
+                    status: status.NOT_FOUND
+                });
+            }
+
+            const secretKey = await sendOtpThroughMail(username, 'CHANGE_PASS_WORD');
+
+            const {password, _id, ...payload} = user._doc;
+            //create token
+            const secretKeyToken = GenerateToken({secretKey, _id}, MAIL_EXCHANGE_TOKEN, '10m');
+
+            //return
+            return FormatData({secretKeyToken});
+        } catch(err) {
+            throw err;
+        }
+    },
+    // [PUT] /api/v1/auth/verify-key
+    vertifyOtpForForgetingPassword: async(key, token) => {
+        try {
+            const {secretKey, _id} = VerifyToken(token, MAIL_TOKEN);
+
+            const isCorrectKey = await verifyMailOtp(key, secretKey);
+
+            if (!isCorrectKey) {
+                throw new Error({
+                    message: 'Your key was not correct, please check your email again',
+                    status: status.UN_AUTHENTICATE
+                })
+            }
+            //confirm otp key for _id
+            const userIdToken = GenerateToken({_id}, USER_TOKEN, '10m');
+            
+            return FormatData({userIdToken});
+        } catch(err){
+            throw err;
+        }
+    },
+    // [POST] /api/v1/auth/forgot-password
+    forgotPassword: async(userId, password) => {
+        try {
+            const {_id} = VerifyToken(userId, USER_TOKEN);
+
+            const salt = await GenerateSalt();
+            const _password=  await GeneratePassword(password, salt);
+
+            await userRepository.updatePasswordByUserId(_id, _password);
+        } catch(err){
+            throw err;
+        }
+    },
+}
+
+module.exports = authService;
