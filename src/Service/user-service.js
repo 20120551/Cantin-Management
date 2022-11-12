@@ -1,5 +1,5 @@
 // import user-repository here
-const {status} = require('./../Constant');
+const {status, expire} = require('./../Constant');
 const {userRepository, staffRepository, roleRepository} = require('./../Database');
 const {
     GenerateSalt, 
@@ -79,7 +79,7 @@ const userService = {
             const salt = await GenerateSalt();
             const _password = await GeneratePassword(newPassword, salt);
 
-            const secretKeyToken = GenerateToken({secretKey, newPassword: _password}, MAIL_TOKEN, '30m');
+            const secretKeyToken = GenerateToken({secretKey, newPassword: _password}, MAIL_TOKEN, expire.MAIL_TOKEN);
             return FormatData({secretKeyToken});
         } catch(err) {
             throw err;
@@ -98,10 +98,35 @@ const userService = {
             throw err;
         }
     },
-    // [POST] /api/v1/user/change-profile
+    // [GET] /api/v1/user/profile
+    getProfile: async(id) => {
+        try {
+            const user = await userRepository.findUserById(id);
+            if (!user) {
+                throw new Error('user does not exist', {
+                    cause: status.NOT_FOUND
+                })
+            }
+            const _userType = await user.populate('userType');
+            const {password, ...payload} = _userType._doc;
+
+            return FormatData({
+                user: payload
+            })
+        } catch(err) {
+            throw err;
+        }
+    },
+    // [POST] /api/v1/user/profile
     updateProfile: async(id, updateData) => {
         try {
-            const user = await userRepository.updateProfileByUserId(id, updateData);
+            let user = await userRepository.findUserById(id);
+            if (!user) {
+                throw new Error('user does not exist', {
+                    cause: status.NOT_FOUND
+                })
+            }
+            user = await userRepository.updateProfileByUserId(id, updateData);
             return FormatData({user});
         } catch(err) {
             throw err;

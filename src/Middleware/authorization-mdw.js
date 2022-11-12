@@ -10,7 +10,7 @@ const authorizationMDW = {
     
             if(!isAuthentication) {
                 return res.status(status.UN_AUTHENTICATE).json({
-                    message: 'your token is valid',
+                    message: 'your token is invalid',
                     data: null
                 })
             };
@@ -29,7 +29,7 @@ const authorizationMDW = {
     
             if(!isAuthentication) {
                 return res.status(status.UN_AUTHENTICATE).json({
-                    message: 'your token is valid',
+                    message: 'your token is invalid',
                     data: null
                 })
             };
@@ -47,7 +47,6 @@ const authorizationMDW = {
 
             const {role} = await user.populate('role');
             const {permissions} = await role.populate('permissions');
-            console.log(permissions);
 
             if(!permissions.some((e)=>{
                 let url = e.code;
@@ -70,7 +69,6 @@ const authorizationMDW = {
                         symbol = '&';
                     })
                 }
-                console.log(req.url);
                 return req.url === url;
             })) {
                 return res.status(status.UN_AUTHORIZED).json({

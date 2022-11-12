@@ -19,7 +19,9 @@ module.exports = async function(app) {
     app.use(cookieParser());
 
     // middleware cho cors (cho phép tất cả các web khác có thể truy cập vào api của bạn)
-    app.use(cors());
+    app.use(cors({
+        credentials: true,
+    }));
 
     // connect đến database
     await connectToMongoDb();

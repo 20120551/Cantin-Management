@@ -14,6 +14,11 @@ const {
     sendOtpThroughMail,
 } = require('./handleMailOtp');
 
+const {
+    convertStringToDate,
+    convertDateToCron
+} = require('./converter');
+
 module.exports = {
     GenerateSalt, 
     GeneratePassword,
@@ -24,5 +29,7 @@ module.exports = {
     verifyMailOtp,
     sendOtpThroughMail,
     ValidateSignature,
-    RandomNumber
+    RandomNumber,
+    convertStringToDate,
+    convertDateToCron
 }

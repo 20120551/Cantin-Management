@@ -9,7 +9,8 @@ const userController = new UserController();
 router.post('/signup', authorizationMDW.checkPermission, userController.signUp);
 router.put('/change-password', authorizationMDW.checkUser, userController.sendOtpForChangingPassword);
 router.post('/change-password', authorizationMDW.checkUser, userController.vertifyOtpForChangingPassword);
-router.post('/change-profile', authorizationMDW.checkUser, userController.updateProfile);
+router.get('/profile', authorizationMDW.checkUser, userController.getProfile)
+router.post('/profile', authorizationMDW.checkUser, userController.updateProfile);
 router.post('/logout', authorizationMDW.checkUser, userController.logout);
 
 module.exports = router;

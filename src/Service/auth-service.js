@@ -1,5 +1,5 @@
 // import user-repository here
-const {status} = require('./../Constant');
+const {status, expire} = require('./../Constant');
 const {userRepository} = require('./../Database');
 const {
     GenerateSalt, 
@@ -11,6 +11,7 @@ const {
     sendOtpThroughMail,
     verifyMailOtp
 } = require('./../Utils');
+
 
 const {
     MAIL_TOKEN,
@@ -48,7 +49,7 @@ const authService = {
             const {password: _password, ...payload} = user._doc;
                     
             //create token
-            const token = GenerateToken(payload, ACCESS_TOKEN);
+            const token = GenerateToken(payload, ACCESS_TOKEN, expire.ACCESS_TOKEN);
             
             return FormatData({payload, accessToken: token});
         } catch(err) {
@@ -72,7 +73,7 @@ const authService = {
 
             const {password, _id, ...payload} = user._doc;
             //create token
-            const secretKeyToken = GenerateToken({secretKey, _id}, MAIL_TOKEN, '10m');
+            const secretKeyToken = GenerateToken({secretKey, _id}, MAIL_TOKEN, expire.MAIL_TOKEN);
 
             //return
             return FormatData({secretKeyToken});
@@ -93,7 +94,7 @@ const authService = {
                 })
             }
             //confirm otp key for _id
-            const userIdToken = GenerateToken({_id}, USER_TOKEN, '10m');
+            const userIdToken = GenerateToken({_id}, USER_TOKEN, expire.MAIL_TOKEN);
             
             return FormatData({userIdToken});
         } catch(err){

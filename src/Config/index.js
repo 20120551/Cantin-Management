@@ -6,4 +6,6 @@ module.exports = {
     USER_TOKEN: process.env.USER_TOKEN,
     MAIL_DOMAIN: process.env.MAIL_DOMAIN,
     MAIL_PASSWORD: process.env.MAIL_PASSWORD,
+    PROTOTYPE: process.env.PROTOTYPE,
+    DOMAIN: process.env.DOMAIN
 }

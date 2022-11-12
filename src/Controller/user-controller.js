@@ -64,7 +64,21 @@ class UserController {
             next(err);
         }
     }
-    // [POST] /api/v1/user/change-profile
+    // [GET] /api/v1/user/profile
+    getProfile = async(req, res, next) => {
+        try {
+            const {_id} = req.user;
+            const {user} = await userService.getProfile(_id);
+
+            res.status(status.OK).json({
+                message: 'get user profile sucessfully',
+                data: user
+            })
+        } catch(err) {
+            next(err);
+        }
+    }
+    // [POST] /api/v1/user/profile
     updateProfile = async(req, res, next) => {
         try {
             const {_id} = req.user;
