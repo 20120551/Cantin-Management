@@ -12,7 +12,6 @@ const {
     verifyMailOtp
 } = require('./../Utils');
 
-
 const {
     MAIL_TOKEN,
     USER_TOKEN,

@@ -16,7 +16,9 @@ const {
 
 const {
     convertStringToDate,
-    convertDateToCron
+    convertDateToCron,
+    convertParticularTimeStringToDate,
+    convertStringToMilisecond
 } = require('./converter');
 
 module.exports = {
@@ -31,5 +33,7 @@ module.exports = {
     ValidateSignature,
     RandomNumber,
     convertStringToDate,
-    convertDateToCron
+    convertDateToCron,
+    convertParticularTimeStringToDate,
+    convertStringToMilisecond
 }

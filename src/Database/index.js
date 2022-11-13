@@ -4,5 +4,6 @@ module.exports = {
     roleRepository: require('./Repository/role-repository'),
     cartRepository: require('./Repository/cart-repository'),
     orderRepository: require('./Repository/order-repository'),
+    goodsRepository: require('./Repository/goods-repository'),
     connectToMongoDb: require('./dbConnection'),
 }

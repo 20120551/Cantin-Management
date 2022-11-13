@@ -4,7 +4,7 @@ const {Schema, model} = mongoose;
 
 const ReceiveNote = new Schema({
     goods: [{
-        _id: {
+        goodsInfo: {
             ref: "goods",
             type: Schema.Types.ObjectId
         },

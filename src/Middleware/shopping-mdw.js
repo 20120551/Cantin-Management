@@ -1,11 +1,41 @@
-const {status, expire} = require('./../Constant');
-const {cartRepository} = require('./../Database');
-const {convertStringToDate} = require('./../Utils');
+const {status, expire, restrict} = require('./../Constant');
+const {cartRepository, goodsRepository} = require('./../Database');
+const {convertStringToDate, convertParticularTimeStringToDate} = require('./../Utils');
 
 const Schedule = require('./../Schedule');
 const schedule = new Schedule();
 
 const shoppingMDW = {
+    preventUserOnRushHour: async(req, res, next) => {
+        try {
+            // lấy thời gian hiện tại
+            const [startRushHour, endRushHour] = restrict.rushHour.split('-');
+            const startTime = convertParticularTimeStringToDate(startRushHour);
+            const endTime = convertParticularTimeStringToDate(endRushHour);
+            const currentTime = new Date();
+
+            console.log(startTime, currentTime, endTime);
+
+            // kiểm tra thời gian hiện tại có nằm trong giờ cao điểm không
+            // giờ cao điểm từ 10h30 - 13h30
+            if(currentTime < startTime || currentTime > endTime) {
+                return next();
+            }
+
+            const {goodsId} = req.body;
+            const goods = await goodsRepository.getGoodsById(goodsId);
+            const {type} = goods;
+            if(type === 'mainDish') {
+                return res.status(status.UN_AUTHORIZED).json({
+                    message: 'main dish just valid for buying between 7h00 to 10h30 and 13h30 to 15h30',
+                    data: null
+                })
+            }
+            next();
+        } catch(err) {
+            throw err;
+        }
+    },
     addCookieAutomatically: async(req, res, next) => {
         try {
             const cartId = req.cookies.cart;

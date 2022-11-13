@@ -5,10 +5,7 @@ const {Schema, model} = mongoose;
 const Order = new Schema({
     createAt: {
         type: Date,
-    },
-    createBy: {
-        type: Schema.Types.ObjectId,
-        ref: 'user'
+        default: new Date()
     },
     goods: [{
         _id: {
@@ -24,13 +21,14 @@ const Order = new Schema({
     },
     state: {
         type: String,
-        enum: ['sucess', 'failure', 'pending', 'waiting']
+        enum: ['sucess', 'failure', 'pending', 'waiting'],
+        default: 'waiting'
     },
     receiver: {
         studentId: {
             type: String
         },
-        name: {
+        studentName: {
             type: String
         }
     },

@@ -17,9 +17,38 @@ module.exports.convertStringToDate = (str) => {
         }
         return prev;
     }, new Date());
+    return root;
+}
 
-    // root.setHours(root.getHours() + 7);
-    const result = root.toLocaleString('de-DE');
+module.exports.convertStringToMilisecond = (str) => {
+    const times = str.split(' ');
+    const root = times.reduce((prev, curr)=>{
+        const signal = curr[curr.length - 1];
+        const number = parseInt(curr.slice(0, -1));
+        
+        switch(signal) {
+            case 's':
+                prev = prev + number*1000;
+                break;
+            case 'm':
+                prev = prev + number*60*1000;
+                break;
+            case 'd':
+                prev = prev + number*24*60*60*1000;
+                break;
+        }
+        return prev;
+    }, 0);
+    return root;
+}
+
+module.exports.convertParticularTimeStringToDate = (str) => {
+    const times = str.toLowerCase().split('h');
+    const hour = parseInt(times[0]);
+    const minute = parseInt(times[1]);
+    const root = new Date();
+    root.setMinutes(minute);
+    root.setHours(hour);
     return root;
 }
 

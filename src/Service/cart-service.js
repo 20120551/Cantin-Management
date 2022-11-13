@@ -14,7 +14,7 @@ const cartService = {
                 })
             }
 
-            cart = await cart.populate('goods');
+            cart = await cart.populate('goods._id');
             return FormatData({
                 cart
             })
@@ -31,7 +31,7 @@ const cartService = {
                     cause: status.BAD_REQUEST
                 })
             }
-            cart = await cart.populate('goods');
+            cart = await cart.populate('goods._id');
             return FormatData({
                 cart
             })
@@ -48,7 +48,7 @@ const cartService = {
                     cause: status.BAD_REQUEST
                 })
             }
-            cart = await cart.populate('goods');
+            cart = await cart.populate('goods._id');
             return FormatData({
                 cart
             })
@@ -64,7 +64,7 @@ const cartService = {
                 cause: status.BAD_REQUEST
             })
         }
-        cart = await cart.populate('goods');
+        cart = await cart.populate('goods._id');
         return FormatData({
             cart
         })

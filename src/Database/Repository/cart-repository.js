@@ -25,16 +25,26 @@ const cartRepository = {
             quantity
         } = goods;
         try {
-            const cart = await Cart.findOneAndUpdate({_id: id}, {
-                $push: {
-                    goods: {
-                        _id: goodsId,
-                        quantity
+            const cart = await Cart.findById({_id: id});
+            const {goods} = cart;
+
+            // kiểm tra nếu sản phẩm thêm vào đã có hay chưa
+            if(!goods.some((goods)=>goods._id == goodsId) || goods.length === 0) {
+                goods.push({
+                    _id: goodsId,
+                    quantity
+                })
+            } else {
+                goods.forEach((goods)=>{
+                    if(goods._id == goodsId) {
+                        goods.quantity = goods.quantity + quantity;
                     }
-                }
-            }, {new: true});
+                })
+            }
+
+            const result = await cart.save();
             
-            return cart;
+            return result;
         } catch(err) {
             throw err;
         }

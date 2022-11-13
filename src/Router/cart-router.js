@@ -6,7 +6,11 @@ const router = express.Router();
 const cartController = new CartController();
 
 router.get('/', shoppingMDW.addCookieAutomatically, cartController.getCart);
-router.post('/', shoppingMDW.addCookieAutomatically, cartController.addGoodsToCart);
+router.post('/', 
+    shoppingMDW.addCookieAutomatically, 
+    shoppingMDW.preventUserOnRushHour, 
+    cartController.addGoodsToCart
+);
 router.delete('/', cartController.removeCart);
 router.post('/:goodsId', shoppingMDW.addCookieAutomatically, cartController.updateGoodsOnCart);
 router.put('/:goodsId', shoppingMDW.addCookieAutomatically, cartController.removeGoodsFromCart);

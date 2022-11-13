@@ -20,7 +20,7 @@ const Goods = new Schema({
         type: String,
         enum: ['mainDish', 'sideDish']
     },
-    goodType: {
+    goodsType: {
         refPath: 'type',
         type: Schema.Types.ObjectId
     }
