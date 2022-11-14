@@ -1,0 +1,13 @@
+waiting-state: 28
+
+kiểm tra sản phẩm trong cart và sản phẩm đang bán
+- nếu product > quantity -> quantity
+- nếu product < quantity 
+    - nếu product khác 0: 
+        quantity = product
+    - ngược lại
+        xóa sản phẩm đó ra khỏi order
+
+---------------------
+success-state: 20
+thêm gửi mail về cho khách hàng sau khi thanh toán thành công

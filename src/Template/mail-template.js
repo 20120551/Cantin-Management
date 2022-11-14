@@ -1,15 +1,15 @@
-const {RandomNumber} = require('./../Utils/handleData');
+const { RandomNumber } = require('./../Utils/handleData');
 
 //send email with key
-module.exports.activateMail = (payload)=> {
-    const {email} = payload;
+module.exports.activateMail = (payload) => {
+    const { email } = payload;
     const key = RandomNumber(6);
     const data = {
         from: 'vinhphucit02@gmai.com',
         to: email,
         subject: 'Kích hoạt tài khoản của bạn',
-        html: 
-        (`
+        html:
+            (`
             <!DOCTYPE html>
             <html lang="en">
             <head>
@@ -59,10 +59,10 @@ module.exports.activateMail = (payload)=> {
         `)
     };
 
-    return {data, key};
+    return { data, key };
 }
 
-module.exports.changePassMail = (payload)=> {
+module.exports.changePassMail = (payload) => {
     const {
         email,
         currentPassword,
@@ -73,8 +73,8 @@ module.exports.changePassMail = (payload)=> {
         from: 'vinhphucit02@gmai.com',
         to: email,
         subject: 'Thay đổi mật khẩu',
-        html: 
-        (`
+        html:
+            (`
             <!DOCTYPE html>
             <html lang="en">
             <head>
@@ -123,5 +123,113 @@ module.exports.changePassMail = (payload)=> {
         `)
     };
 
-    return {data, key};
+    return { data, key };
+}
+
+module.exports.paymentSuccess = (payload) => {
+    console.log(payload);
+    const {
+        receiver,
+        timeReceive,
+        goods,
+        totalPrice
+    } = payload;
+    const timeFormat = timeReceive.toLocaleDateString('de-DE', { 
+        year: 'numeric', 
+        month: '2-digit', 
+        day: '2-digit',
+        hour: 'numeric',
+        minute: 'numeric'
+    })
+    const vietnameseCurrency = totalPrice.toString().toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
+    const goodsTable = goods.map((goods)=>{
+        const {
+            _id: goodsInfo,
+            quantity
+        } = goods;
+        return `
+            <tr style="box-sizing: border-box;margin: 0;padding: 0;">
+                <td style="box-sizing: border-box;margin: 0;padding: 8px;border: 1px solid #dddddd;text-align: left;">${goodsInfo.type === "mainDish" ? "Món chính" : "Món phụ"}</td>
+                <td style="box-sizing: border-box;margin: 0;padding: 8px;border: 1px solid #dddddd;text-align: left;">${goodsInfo.name}</td>
+                <td style="box-sizing: border-box;margin: 0;padding: 8px;border: 1px solid #dddddd;text-align: left;">${goodsInfo.price}</td>
+                <td style="box-sizing: border-box;margin: 0;padding: 8px;border: 1px solid #dddddd;text-align: left;">${quantity}</td>
+            </tr>
+        `
+    }).join('');
+    const data = {
+        from: 'vinhphucit02@gmai.com',
+        to: `${receiver.studentId}@student.hcmus.edu.vn`,
+        subject: 'Thanh tóa hóa đơn thành công',
+        html: (`
+            <!DOCTYPE html>
+            <html lang="en" style="box-sizing: border-box;margin: 0;padding: 0;">
+            
+            <head style="box-sizing: border-box;margin: 0;padding: 0;">
+                <meta charset="UTF-8" style="box-sizing: border-box;margin: 0;padding: 0;">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge" style="box-sizing: border-box;margin: 0;padding: 0;">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" style="box-sizing: border-box;margin: 0;padding: 0;">
+                <title style="box-sizing: border-box;margin: 0;padding: 0;">Document</title>
+                
+            </head>
+            
+            <body style="box-sizing: border-box;margin: 0;padding: 0;">
+                <div class="container" style="box-sizing: border-box;margin: 0 auto;padding: 0;width: 80%;height: 100%;box-shadow: 3px 3px 3px black;">
+                    <div class="header" style="box-sizing: border-box;margin: 0;padding: 0;width: 100%;height:250px;background-color:rgb(242, 164, 9);position:relative;">
+                        <div class="sub" style="text-align:center;padding-top:100px;box-sizing: border-box;margin: 0;position: absolute;color: white;font-size: 35px;top: 50%;left: 50%;transform: translate(-50%, -50%);">
+                            <h3 style="box-sizing: border-box;margin: 0;padding: 0;">CANTEEN HCMUS</h3>
+                        </div>
+                    </div>
+                    <div class="content" style="box-sizing: border-box;margin: 0;padding: 0 10px;">
+                        <div class="title" style="box-sizing: border-box;margin: 0;padding: 0;">
+                            <h3 class="title-header" style="box-sizing: border-box;margin: 0;padding: 0;text-align: center;font-size: 30px;">Mua hàng thành công</h3>
+                        </div>
+                        <div class="description" style="box-sizing: border-box;margin: -10px 0 0 30px;padding: 0;">
+                            <div class="notification" style="box-sizing: border-box;margin: 0;padding: 0;margin-top: 20px;">
+                                <h3 style="box-sizing: border-box;margin: 0;padding: 0;font-size: 24px;margin-bottom: 10px;">Thông báo</h3>
+                                <div class="notification-content" style="box-sizing: border-box;margin: 0;padding: 0;">
+                                    <p style="box-sizing: border-box;margin: 0;padding: 0;">Bạn đã thanh toán đơn hàng thành công thông qua ứng dung HCMUS Canteen, vui lòng kiểm tra lại
+                                        các thông tin bến dưới
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="student" style="box-sizing: border-box;margin: 0;padding: 0;margin-top: 20px;">
+                                <h3 style="box-sizing: border-box;margin: 0;padding: 0;font-size: 24px;margin-bottom: 10px;">Thông tin cá nhân</h3>
+                                <div class="student-content" style="box-sizing: border-box;margin: 0;padding: 0;">
+                                    <p style="box-sizing: border-box;margin: 0;padding: 0;margin-left: 20px;">Họ & tên: <strong style="box-sizing: border-box;margin: 0;padding: 0;">${receiver.studentName}</strong></p>
+                                    <p style="box-sizing: border-box;margin: 0;padding: 0;margin-left: 20px;">MSSV: <strong style="box-sizing: border-box;margin: 0;padding: 0;">${receiver.studentId}</strong></p>
+                                    <p style="box-sizing: border-box;margin: 0;padding: 0;margin-left: 20px;">Thời gian nhận: <strong style="box-sizing: border-box;margin: 0;padding: 0;">${timeFormat}</strong></p>
+                                </div>
+                            </div>
+                            <div class="order" style="box-sizing: border-box;margin: 0;padding: 0;margin-top: 20px;">
+                                <h3 style="box-sizing: border-box;margin: 0;padding: 0;font-size: 24px;margin-bottom: 10px;">Thông tin đơn hàng</h3>
+                                <div class="order-content" style="box-sizing: border-box;margin: 0;padding: 10px 20px;">
+                                    <table style="box-sizing: border-box;margin: 0;padding: 0;font-family: arial, sans-serif;border-collapse: collapse;width: 100%;">
+                                        <tr style="box-sizing: border-box;margin: 0;padding: 0;">
+                                            <th style="box-sizing: border-box;margin: 0;padding: 8px;border: 1px solid #dddddd;text-align: left;">Phân loại</th>
+                                            <th style="box-sizing: border-box;margin: 0;padding: 8px;border: 1px solid #dddddd;text-align: left;">Tên món ăn</th>
+                                            <th style="box-sizing: border-box;margin: 0;padding: 8px;border: 1px solid #dddddd;text-align: left;">Giá</th>
+                                            <th style="box-sizing: border-box;margin: 0;padding: 8px;border: 1px solid #dddddd;text-align: left;">Số lượng</th>
+                                        </tr>
+                                        ${goodsTable}
+                                        <tr style="background-color: rgb(255, 190, 9);color: rgb(255, 255, 255);box-sizing: border-box;margin: 0;padding: 0;">
+                                            <td style="box-sizing: border-box;margin: 0;padding: 8px;border: 1px solid #dddddd;text-align: left;"><strong style="box-sizing: border-box;margin: 0;padding: 0;">Tổng tiền</strong></td>
+                                            <td colspan="3" style="text-align: center;box-sizing: border-box;margin: 0;padding: 8px;border: 1px solid #dddddd;">${vietnameseCurrency} vnd</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer" style="background-color: rgb(242, 164, 9);margin-top: 30px;height: 80px;">
+                        <div class="copy-right" style="margin-left: 30px;margin-top: 10px;display: inline-block;">
+                            <p style="color: white;font-size: 10px;">@${receiver.studentId}@student.hcmus.edu.vn, when ${new Date().toLocaleDateString('de-DE')}</p>
+                            <p style="color: white;font-size: 10px;">Hệ thống canteen HCMUS</p>
+                        </div>
+                    </div>
+                </div>
+            </body>
+            </html>
+        `)
+    }
+    return {data};
 }

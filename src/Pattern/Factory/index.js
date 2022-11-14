@@ -6,5 +6,7 @@ module.exports.createMailTemplate = function(type) {
             return email.activateMail;
         case 'CHANGE_PASS_WORD': 
             return email.changePassMail;
+        case 'PAYMENT':
+            return email.paymentSuccess;
     }
 }

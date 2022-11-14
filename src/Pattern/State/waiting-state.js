@@ -25,12 +25,17 @@ class WaitingState {
             // lấy hết thông tin sản phẩm trong giỏ hàng
             const {cart: unhandleCart} = await cartService.getCart(cartId);
             // kiểm tra thông tin sản phẩm
-            const handledCart = unhandleCart.goods.map((goods)=>{
+            let handledCart = unhandleCart.goods.map((goods)=>{
                 let {_id: goodsInfo, quantity} = goods;
                 const {_id, name, price, product} = goodsInfo;
                 // kiểm tra nếu số lượng mua lớn hơn số lượng sẵn có
                 if(quantity > product) {
-                    quantity = product;
+                    if(product === 0) {
+                        // xóa sản phẩm ra khỏi giỏ hàng
+                        return null;
+                    } else {
+                        quantity = product;
+                    }
                 }
                 return {
                     _id,
@@ -39,7 +44,9 @@ class WaitingState {
                     quantity
                 }
             })
-            console.log(handledCart)
+            //filter lại các hàng hóa bị xóa khỏi cart
+            handledCart = handledCart.filter((goods)=>goods !== null);
+            console.log(handledCart);
             // tạo 1 session chứa thông tin các sản phẩm thanh toán
             const session = await stripe.checkout.sessions.create({
                 payment_method_types: ['card'],

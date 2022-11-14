@@ -1,4 +1,4 @@
-const { FormatData } = require('../../Utils');
+const { FormatData, sendingMail } = require('../../Utils');
 const {orderService, cartService} = require('./../../Service');
 
 class SuccessState {
@@ -18,7 +18,7 @@ class SuccessState {
             } = order;
             const {order: updatedOrder} = await orderService.updateOrderState(orderId, 'success');
             // gửi email thông báo thanh toán thành công cho khách hàng
-    
+            await sendingMail(updatedOrder, 'PAYMENT');
             // xóa thông tin giỏ hàng
             const {
                 _id: cartId

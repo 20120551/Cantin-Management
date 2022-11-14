@@ -2,6 +2,17 @@ const {transporter} = require('./../Lib');
 const {GenerateSalt, GeneratePassword, ValidatePassword} = require('./handleData');
 const {createMailTemplate} = require('./../Pattern/Factory');
 
+// sending mail
+module.exports.sendingMail = async(payload, type) => {
+    try {
+        const template = createMailTemplate(type);
+        const {data} = template(payload);
+        //send data to mail
+        await transporter.sendMail(data);
+    } catch(err) {
+        throw err;
+    }
+}
 //otp sending
 module.exports.sendOtpThroughMail = async(payload, type)=>{
     try {

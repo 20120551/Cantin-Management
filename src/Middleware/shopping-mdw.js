@@ -8,26 +8,39 @@ const schedule = new Schedule();
 const shoppingMDW = {
     preventUserOnRushHour: async(req, res, next) => {
         try {
-            // lấy thời gian hiện tại
-            const [startRushHour, endRushHour] = restrict.rushHour.split('-');
-            const startTime = convertParticularTimeStringToDate(startRushHour);
-            const endTime = convertParticularTimeStringToDate(endRushHour);
+            // lấy các mốc thời gian cho phép đặt sản phẩm
+            const [morningShift, afternoonShift] = restrict.rushHour.split(',');
+
+            // ca sáng
+            const [startMorningShift, endMorningShift] = morningShift.split('-');
+            const startMorningShiftTime = convertParticularTimeStringToDate(startMorningShift);
+            const endMorningShiftTime = convertParticularTimeStringToDate(endMorningShift);
+
+            // ca chiều
+            const [startAfternoonShift, endAfternoonShift] = afternoonShift.split('-');
+            const startAfternoonShiftTime = convertParticularTimeStringToDate(startAfternoonShift);
+            const endAfternoonShiftTime = convertParticularTimeStringToDate(endAfternoonShift);
+
             const currentTime = new Date();
-
-            console.log(startTime, currentTime, endTime);
-
             // kiểm tra thời gian hiện tại có nằm trong giờ cao điểm không
             // giờ cao điểm từ 10h30 - 13h30
-            if(currentTime < startTime || currentTime > endTime) {
+            const isValidMorningShift = (currentTime >= startMorningShiftTime && currentTime <= endMorningShiftTime)
+                ? true : false;
+            const isValidAfternoonShift = (currentTime >= startAfternoonShiftTime && currentTime <= endAfternoonShiftTime)
+                ? true : false;
+
+            // kiểm tra nếu thời gian mua valid
+            if(isValidMorningShift || isValidAfternoonShift) {
                 return next();
             }
 
+            // nếu không valid, kiểm tra là nước hay thức ăn chính
             const {goodsId} = req.body;
             const goods = await goodsRepository.getGoodsById(goodsId);
             const {type} = goods;
             if(type === 'mainDish') {
                 return res.status(status.UN_AUTHORIZED).json({
-                    message: 'main dish just valid for buying between 7h00 to 10h30 and 13h30 to 15h30',
+                    message: `main dish just valid for buying between ${morningShift} and ${afternoonShift}`,
                     data: null
                 })
             }

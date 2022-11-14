@@ -12,6 +12,7 @@ const {
 const {
     verifyMailOtp,
     sendOtpThroughMail,
+    sendingMail
 } = require('./handleMailOtp');
 
 const {
@@ -30,6 +31,7 @@ module.exports = {
     FormatData,
     verifyMailOtp,
     sendOtpThroughMail,
+    sendingMail,
     ValidateSignature,
     RandomNumber,
     convertStringToDate,
