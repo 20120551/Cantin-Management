@@ -6,7 +6,8 @@ const {
     VerifyToken,
     FormatData,
     ValidateSignature,
-    RandomNumber
+    RandomNumber,
+    RelativeOfCurrentDayAndScheduleDay
 } = require('./handleData');
 
 const {
@@ -37,5 +38,6 @@ module.exports = {
     convertStringToDate,
     convertDateToCron,
     convertParticularTimeStringToDate,
-    convertStringToMilisecond
+    convertStringToMilisecond,
+    RelativeOfCurrentDayAndScheduleDay
 }

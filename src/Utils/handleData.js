@@ -68,4 +68,13 @@ module.exports.FormatData = (data)=>{
     throw new Error('Data Not found!');
 }
 
+module.exports.RelativeOfCurrentDayAndScheduleDay = (date) => {
+    const root = new Date();
+
+    // nếu thời gian hiện tại lớn hơn thời gian lên lịch, thì chưa qua ngày mới
+    const isNewDate = root > date ? false : true;
+    // đang ở ngày cũ
+    return isNewDate;
+}
+
 

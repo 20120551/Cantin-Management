@@ -1,10 +1,15 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const EventEmitter = require('events');
 const bodyParser = require('body-parser');
+
 const router = require('./src/Router');
+const subscriber = require('./src/Subscriber'); 
 const {errorHandlingMDW} = require('./src/Middleware');
 const {connectToMongoDb} = require('./src/Database');
+
+const Shedule = require('./src/Schedule');
 
 // thêm 1 vài middleware pipeline ở đây
 module.exports = async function(app) {
@@ -31,4 +36,11 @@ module.exports = async function(app) {
 
     // khởi tạo middleware handle lỗi
     app.use(errorHandlingMDW.handleErrorOccurAfterRequest);
+
+    // lên lịch tự động 1 lấy một vài thứ
+    const event = new EventEmitter();
+    const shedule = new Shedule(event);
+    shedule.start();
+    // lỗi schedule
+    subscriber(event);
 }

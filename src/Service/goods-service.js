@@ -29,6 +29,13 @@ const goodsService = {
         } catch(err) {
             throw err;
         }
+    },
+    resetProductOfMainDish: async() => {
+        try {
+            await goodsRepository.resetProductOfMainDish();
+        } catch(err) {
+            throw err;
+        }
     }
 }
 

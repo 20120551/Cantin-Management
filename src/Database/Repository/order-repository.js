@@ -53,6 +53,24 @@ const orderRepository = {
         } catch(err) {
             throw err;
         }
+    },
+    getOrderBetweenAInterval: async(startDate, endDate) => {
+        try {
+            const orders = await Order.find({
+                createAt: {
+                    $gte: new Date('2022-11-14T08:14:38.610+00:00'),
+                    $lt: new Date('2022-11-14T12:10:54.476+00:00')
+                }
+            }).populate({
+                path: 'goods._id',
+                populate: {
+                    path: 'goodsType'
+                }
+            });
+            return orders;
+        } catch(err) {
+            throw err;
+        }
     }
 }
 

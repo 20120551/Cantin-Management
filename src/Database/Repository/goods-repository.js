@@ -20,6 +20,17 @@ const goodsRepository = {
         } catch(err) {
             throw err;
         }
+    },
+    resetProductOfMainDish: async() => {
+        try {
+            await Goods.updateMany({type: 'mainDish'}, {
+                $set: {
+                    product: 0
+                }
+            })
+        } catch(err) {
+            throw err;
+        }
     }
 }
 

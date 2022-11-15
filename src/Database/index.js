@@ -5,5 +5,6 @@ module.exports = {
     cartRepository: require('./Repository/cart-repository'),
     orderRepository: require('./Repository/order-repository'),
     goodsRepository: require('./Repository/goods-repository'),
+    revenueRepository: require('./Repository/revenue-repository'),
     connectToMongoDb: require('./dbConnection'),
 }

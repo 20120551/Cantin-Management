@@ -8,9 +8,6 @@ const Permission = new Schema({
     },
     code: {
         type: String,
-    },
-    redirect: {
-        type: String
     }
 });
 

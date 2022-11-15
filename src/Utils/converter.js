@@ -42,22 +42,29 @@ module.exports.convertStringToMilisecond = (str) => {
     return root;
 }
 
-module.exports.convertParticularTimeStringToDate = (str) => {
+module.exports.convertParticularTimeStringToDate = (str, _root = new Date()) => {
     const times = str.toLowerCase().split('h');
     const hour = parseInt(times[0]);
     const minute = parseInt(times[1]);
-    const root = new Date();
+    const root = _root;
     root.setMinutes(minute);
     root.setHours(hour);
     return root;
 }
 
+// 1y 1mo 1d 19h 30m 1s
 module.exports.convertDateToCron = (date) => {
-    const minutes = date.getMinutes();
-    const hours = date.getHours();
-    const days = date.getDate();
-    const months = date.getMonth() + 1;
-    const dayOfWeek = date.getDay();
+    const times = date.split(' ');
+    const standard = {s: '*', m: '*',h: '*', d: '*', mo: '*', y: '*'};
+    times.forEach((time) => {
+        const signal = time[time.length - 1];
+        const number = time.slice(0, -1);
 
-    return `${minutes} ${hours} ${days} ${months} ${dayOfWeek}`;
+        const signalValue = standard[signal];
+        if(signalValue) {
+            standard[signal] = number;
+        }
+    });
+    const cron = Object.values(standard).reduce((prev, curr)=>prev + ' ' + curr, '')
+    return cron;
 };
