@@ -58,8 +58,8 @@ const orderRepository = {
         try {
             const orders = await Order.find({
                 createAt: {
-                    $gte: new Date('2022-11-14T08:14:38.610+00:00'),
-                    $lt: new Date('2022-11-14T12:10:54.476+00:00')
+                    $gte: startDate,
+                    $lt: endDate
                 }
             }).populate({
                 path: 'goods._id',

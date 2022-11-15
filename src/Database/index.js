@@ -6,5 +6,7 @@ module.exports = {
     orderRepository: require('./Repository/order-repository'),
     goodsRepository: require('./Repository/goods-repository'),
     revenueRepository: require('./Repository/revenue-repository'),
+    bStatisticRepository: require('./Repository/bStatistic-repository'),
+    receiveNoteRepository: require('./Repository/receiveNote-repository'),
     connectToMongoDb: require('./dbConnection'),
 }

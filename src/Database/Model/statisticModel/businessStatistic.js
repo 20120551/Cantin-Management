@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const {Schema, model} = mongoose;
 
-const statisticBusiness = new Schema({
+const BusinessStatistic = new Schema({
     revenues: [{
         type: Schema.Types.ObjectId,
         ref: 'revenue'
@@ -20,6 +20,10 @@ const statisticBusiness = new Schema({
     profit: {
         type: Number
     },
+    createAt: {
+        type: Date,
+        default: new Date()
+    }
 });
 
-module.exports = model('statisticBusiness', statisticBusiness);
+module.exports = model('businessStatistic', BusinessStatistic);

@@ -25,7 +25,7 @@ const revenueRepository = {
                     $gte: startDate,
                     $lt: endDate
                 }
-            }).populate('goods._id');
+            })
             return revenues;
         } catch(err) {
             throw err;

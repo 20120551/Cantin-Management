@@ -1,4 +1,5 @@
-module.exports.convertStringToDate = (str) => {
+// hàm này dùng để tăng thời gian hiện tại lên 1 thời gian nào đó
+module.exports.convertStringToDate = (str, _root = new Date()) => {
     const times = str.split(' ');
     const root = times.reduce((prev, curr)=>{
         const signal = curr[curr.length - 1];
@@ -11,15 +12,19 @@ module.exports.convertStringToDate = (str) => {
             case 'm':
                 prev.setMinutes(prev.getMinutes() + number);
                 break;
+            case 'h':
+                prev.setMinutes(prev.getMinutes() + number);
+                break;
             case 'd':
                 prev.setDate(prev.getDate() + number);
                 break;
         }
         return prev;
-    }, new Date());
+    }, _root);
     return root;
 }
 
+// hàm này dùng để chuyển 1 khoảng thời gian về milisecond
 module.exports.convertStringToMilisecond = (str) => {
     const times = str.split(' ');
     const root = times.reduce((prev, curr)=>{
@@ -33,6 +38,8 @@ module.exports.convertStringToMilisecond = (str) => {
             case 'm':
                 prev = prev + number*60*1000;
                 break;
+            case 'h':
+                prev = prev + number*60*60*1000;
             case 'd':
                 prev = prev + number*24*60*60*1000;
                 break;
@@ -42,13 +49,33 @@ module.exports.convertStringToMilisecond = (str) => {
     return root;
 }
 
+// hàm này để chuyển thời gian hiện tại về một thời gian nào đó
 module.exports.convertParticularTimeStringToDate = (str, _root = new Date()) => {
-    const times = str.toLowerCase().split('h');
-    const hour = parseInt(times[0]);
-    const minute = parseInt(times[1]);
+    const times = str.split(' ');
     const root = _root;
-    root.setMinutes(minute);
-    root.setHours(hour);
+    times.forEach((curr)=>{
+        const signal = curr[curr.length - 1];
+        const number = parseInt(curr.slice(0, -1));
+        
+        switch(signal) {
+            case 's':
+                root.setSeconds(number);
+                break;
+            case 'h':
+                root.setHours(number);
+                break;
+            case 'm':
+                root.setMinutes(number);
+                break;
+            case 'd':
+                root.setDate(number);
+                break;
+            case 'mo':
+                root.setMonth(number);
+            case 'y':
+                root.setYear(number);
+        }
+    });
     return root;
 }
 

@@ -10,7 +10,7 @@ module.exports = {
     Cart: require('./shoppingModel/cart-model'),
     Order: require('./shoppingModel/order-model'),
     Revenue: require('./statisticModel/revenue-model'),
-    statisticBusiness: require('./statisticModel/statisticBusiness-model'),
+    BusinessStatistic: require('./statisticModel/businessStatistic'),
     Owner: require('./userModel/owner-model'),
     Permission: require('./userModel/permission-model'),
     Role: require('./userModel/role-model'),

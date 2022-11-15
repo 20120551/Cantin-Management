@@ -69,7 +69,7 @@ const authorizationMDW = {
                         symbol = '&';
                     })
                 }
-                return req.url === url;
+                return req.originalUrl === url;
             })) {
                 return res.status(status.UN_AUTHORIZED).json({
                     message: 'you are not permission'

@@ -4,5 +4,6 @@ module.exports = {
     cartService: require('./cart-service'),
     orderService: require('./order-service'),
     goodsService: require('./goods-service'),
-    revenueService: require('./revenue-service')
+    revenueService: require('./revenue-service'),
+    bStatisticService: require('./bStatistic-service'),
 }

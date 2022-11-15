@@ -4,4 +4,5 @@ module.exports = {
     CartController: require('./cart-controller'),
     OrderController: require('./order-controller'),
     RevenueController: require('./revenue-controller'),
+    BStatisticController: require('./bStatistic-controller'),
 }

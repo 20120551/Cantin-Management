@@ -3,4 +3,5 @@ module.exports = {
     expire: require('./expire-constant'),
     restrict: require('./restrict-constant'),
     schedule: require('./schedule-constant'),
+    profit: require('./profit-constant'),
 }

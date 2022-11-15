@@ -26,6 +26,17 @@ class RevenueController {
             next(err);
         }
     }
+    createRevenue = async(req, res, next) => {
+        try {
+            const {revenue} = await revenueService.createRevenue();
+            res.status(status.OK).json({
+                message: 'create revenue sucessfully',
+                data: revenue
+            })
+        } catch(err) {
+            next(err);
+        }
+    }
 }
 
 module.exports = RevenueController;

@@ -6,7 +6,7 @@ const router = express.Router();
 const revenueController = new RevenueController();
 
 //authorizationMDW.checkPermission
-router.get('/', revenueController.getRevenueBetweenAInterval);
-router.get('/:id', revenueController.getRevenue);
-
+router.post('/', authorizationMDW.checkPermission, revenueController.getRevenueBetweenAInterval);
+router.put('/create', authorizationMDW.checkPermission, revenueController.createRevenue);
+router.get('/:id', authorizationMDW.checkPermission, revenueController.getRevenue);
 module.exports = router;
