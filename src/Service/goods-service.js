@@ -7,8 +7,6 @@ const {FormatData} = require('./../Utils');
 const goodsService = {
     addGood: async(goodInfo) => {
         try {
-            console.log('service');
-            console.log(goodInfo);
             let _dishType;
             if (goodInfo.type === 'mainDish')
             {
@@ -21,9 +19,6 @@ const goodsService = {
                 _dishType =  await sideDishRepository.createDefault();
             }
 
-            console.log('service');
-            console.log(_dishType);
-
             // thêm hàng
             const good = await goodsRepository.addGood({
                 name: goodInfo.name,
@@ -33,9 +28,6 @@ const goodsService = {
                 type: goodInfo.type,
                 goodsType: _dishType
             });
-
-            console.log('service');
-            console.log(good);
 
             return FormatData({good});
         } catch(err) {
