@@ -48,11 +48,26 @@ const goodsService = {
             throw err;
         }
     },
+    deleteGoodByID: async(id) => {
+        try {
+            let good = await goodsRepository.getGoodsById(id);
+            if(!good) {
+                throw new Error('Goods does not exist.', {
+                    cause: status.BAD_REQUEST
+                })
+            }
+            good = await goodsRepository.deleteGoodByID(id);
+            return FormatData({good});
+        } catch(err) {
+            throw err;
+        }
+    },
+
     getGoodsById: async(id) => {
         try {
             let goods = await goodsRepository.getGoodsById(id);
             if(!goods) {
-                throw new Error('goods does not exist', {
+                throw new Error('Goods does not exist.', {
                     cause: status.BAD_REQUEST
                 })
             }

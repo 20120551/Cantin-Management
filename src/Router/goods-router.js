@@ -6,7 +6,8 @@ const goodsController = new GoodsController();
 
 router.get('/storeroom', goodsController.getStoreRoom);
 router.post('/addGood', goodsController.addGood);
-router.get('/good/:id',goodsController.getGoodByID);
-router.post('/update/:id',goodsController.updateGoodByID);
+router.get('/:id',goodsController.getGoodByID);
+router.post('/:id',goodsController.updateGoodByID);
+router.delete('/:id',goodsController.deleteGoodByID);
 
 module.exports = router;

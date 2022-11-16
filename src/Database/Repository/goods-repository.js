@@ -60,6 +60,16 @@ const goodsRepository = {
             throw err;
         }
     },
+    deleteGoodByID: async(_id)=>{
+        try {
+            Goods.deleteById(_id, function (err, petDocument) {});
+            let result = await Goods.findById({_id: _id});
+            return result;
+        } catch(err) {
+            throw err;
+        }
+    },
+
     getStoreRoom: async() => {
         try {
             const goods = await Goods.find({});

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoose_delete = require('mongoose-delete');
 
 const {Schema, model} = mongoose;
 
@@ -25,5 +26,7 @@ const Goods = new Schema({
         type: Schema.Types.ObjectId
     }
 });
+
+Goods.plugin(mongoose_delete, { overrideMethods: 'all' });
 
 module.exports = model('goods', Goods);

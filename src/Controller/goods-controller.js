@@ -69,6 +69,22 @@ class GoodsController {
             next(err);
         }
     }
+
+    // [POST] /api/v1/goods/delete/:id
+    deleteGoodByID = async(req, res, next) => {
+        try {
+            const _id = req.params.id;
+ 
+            const good = await goodsService.deleteGoodByID(_id);
+
+            res.status(status.OK).json({
+                message: 'Delete good successfully.',
+                data: good,
+            });
+        } catch(err) {
+            next(err);
+        }
+    }
 }
 
 module.exports = GoodsController;
