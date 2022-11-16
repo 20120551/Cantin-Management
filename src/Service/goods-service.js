@@ -34,6 +34,20 @@ const goodsService = {
             throw err;
         }
     },
+    updateGoodByID: async(id, goodInfo) => {
+        try {
+            let good = await goodsRepository.getGoodsById(id);
+            if (!good) {
+                throw new Error('Good does not exist.', {
+                    cause: status.NOT_FOUND
+                })
+            }
+            good = await goodsRepository.updateGoodByID(id, goodInfo);
+            return FormatData({good});
+        } catch(err) {
+            throw err;
+        }
+    },
     getGoodsById: async(id) => {
         try {
             let goods = await goodsRepository.getGoodsById(id);
@@ -50,13 +64,13 @@ const goodsService = {
     },
     getStoreRoom: async() => {
         try {
-            let goods = await goodsRepository.getStoreRoom();
-            if(!goods) {
+            let storeroom = await goodsRepository.getStoreRoom();
+            if(!storeroom) {
                 throw new Error('There no goods in the store', {
                     cause: status.BAD_REQUEST
                 })
             }
-            return FormatData({goods});
+            return FormatData({storeroom});
         } catch(err) {
             throw err;
         }

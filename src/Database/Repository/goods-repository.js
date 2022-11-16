@@ -1,4 +1,6 @@
 const {Goods} = require('./../Model');
+const {MainDish} = require('./../Model');
+const {SideDish} = require('./../Model');
 
 const goodsRepository = {
     // Tạo hàng mới
@@ -29,7 +31,36 @@ const goodsRepository = {
             throw err;
         }
     },
-    getStoreRoom: async(id) => {
+    updateGoodByID: async(_id, goodInfo)=>{
+        try {
+            let good = await Goods.findById({_id: _id});
+            let goodsType;
+            if (goodInfo.type === "mainDish")
+            {
+                goodsType = await MainDish.findById({_id: good.goodsType});
+            }
+            else
+            {
+                goodsType = await SideDish.findById({_id: good.goodsType});
+            }
+
+            // deep copy goodsType
+            Object.assign(goodsType, goodInfo.goodsType);
+
+            await goodsType.save();
+
+            goodInfo.goodsType = good.goodsType;
+            // deep copy goodsType
+            Object.assign(good, goodInfo);
+
+            const result = await good.save();
+            result.goodsType = goodsType;
+            return result;
+        } catch(err) {
+            throw err;
+        }
+    },
+    getStoreRoom: async() => {
         try {
             const goods = await Goods.find({});
             return goods;
