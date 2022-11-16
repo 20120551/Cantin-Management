@@ -5,6 +5,8 @@ module.exports = {
     cartRepository: require('./Repository/cart-repository'),
     orderRepository: require('./Repository/order-repository'),
     goodsRepository: require('./Repository/goods-repository'),
+    sideDishRepository: require('./Repository/sideDish-repository'),
+    mainDishRepository: require('./Repository/mainDish-repository'),
     revenueRepository: require('./Repository/revenue-repository'),
     bStatisticRepository: require('./Repository/bStatistic-repository'),
     receiveNoteRepository: require('./Repository/receiveNote-repository'),
