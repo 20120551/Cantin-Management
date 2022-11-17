@@ -5,6 +5,9 @@ const orderRouter = require('./order-router');
 const revenueRouter = require('./revenue-router');
 const bStasticRouter = require('./bStatitstic-router');
 const goodsRouter = require('./goods-router');
+const deliveryNoteRouter = require('./deliveryNote-router');
+const receiveNoteRouter = require('./receiveNote-router');
+
 
 module.exports = function(app) {
     app.use('/api/v1/auth', authRouter);
@@ -14,4 +17,6 @@ module.exports = function(app) {
     app.use('/api/v1/revenue', revenueRouter);
     app.use('/api/v1/statistic', bStasticRouter);
     app.use('/api/v1/goods', goodsRouter);
+    app.use('/api/v1/delivery', deliveryNoteRouter);
+    app.use('/api/v1/receive', receiveNoteRouter);
 }

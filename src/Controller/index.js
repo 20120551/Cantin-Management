@@ -5,5 +5,7 @@ module.exports = {
     OrderController: require('./order-controller'),
     RevenueController: require('./revenue-controller'),
     BStatisticController: require('./bStatistic-controller'),
-    GoodsController: require('./goods-controller')
+    GoodsController: require('./goods-controller'),
+    DeliveryNoteController: require('./deliveryNote-controller'),
+    ReceiveNoteController: require('./receiveNote-controller'),
 }

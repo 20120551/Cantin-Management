@@ -1,10 +1,10 @@
 const {MainDish} = require('./../Model');
 
 const mainDishRepository = {
-    createDefault: async()=>{
+    createDefault: async(info)=>{
         try {
             const newMD = new MainDish({
-                profitRate: '5000',
+                profitRate: info.profitRate,
             });
 
             const result = await newMD.save();

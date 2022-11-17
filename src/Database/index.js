@@ -10,5 +10,6 @@ module.exports = {
     revenueRepository: require('./Repository/revenue-repository'),
     bStatisticRepository: require('./Repository/bStatistic-repository'),
     receiveNoteRepository: require('./Repository/receiveNote-repository'),
+    deliveryNoteRepository: require('./Repository/deliveryNote-repository'),
     connectToMongoDb: require('./dbConnection'),
 }

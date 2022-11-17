@@ -1,10 +1,10 @@
 const {SideDish} = require('./../Model');
 
 const sideDishRepository = {
-    createDefault: async()=>{
+    createDefault: async(info)=>{
         try {
             const newSD = new SideDish({
-                capacity: '1000',
+                capacity: info.capacity,
             });
 
             const result = await newSD.save();

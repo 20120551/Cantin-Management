@@ -6,4 +6,6 @@ module.exports = {
     goodsService: require('./goods-service'),
     revenueService: require('./revenue-service'),
     bStatisticService: require('./bStatistic-service'),
+    deliveryNoteService: require('./deliveryNote-service'),
+    receiveNoteService: require('./receiveNote-service'),
 }

@@ -31,6 +31,19 @@ const goodsRepository = {
             throw err;
         }
     },
+    getGoodsByType: async(type) => {
+        try {
+            const goods = await Goods.find({type: type}).exec();
+            for (let i = 0; i < goods.length; i++) {
+                await goods[i].populate({
+                    path: 'goodsType',
+                });
+            };
+            return goods;
+        } catch(err) {
+            throw err;
+        }
+    },
     updateGoodByID: async(_id, goodInfo)=>{
         try {
             let good = await Goods.findById({_id: _id});
@@ -73,6 +86,11 @@ const goodsRepository = {
     getStoreRoom: async() => {
         try {
             const goods = await Goods.find({});
+            for (let i = 0; i < goods.length; i++) {
+                await goods[i].populate({
+                    path: 'goodsType',
+                });
+            }
             return goods;
         } catch(err) {
             throw err;

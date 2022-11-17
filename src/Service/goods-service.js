@@ -11,12 +11,12 @@ const goodsService = {
             if (goodInfo.type === 'mainDish')
             {
                 //tạo mặc định 1 main dish
-                _dishType =  await mainDishRepository.createDefault();
+                _dishType =  await mainDishRepository.createDefault(goodInfo.goodsType);
             }
             else
             {
                 //tạo mặc định 1 side dish
-                _dishType =  await sideDishRepository.createDefault();
+                _dishType =  await sideDishRepository.createDefault(goodInfo.goodsType);
             }
 
             // thêm hàng
@@ -72,6 +72,19 @@ const goodsService = {
                 })
             }
             goods = await goods.populate('goodsType');
+            return FormatData({goods});
+        } catch(err) {
+            throw err;
+        }
+    },
+    getGoodsByType: async(type) => {
+        try {
+            let goods = await goodsRepository.getGoodsByType(type);
+            if(!goods) {
+                throw new Error('Goods does not exist.', {
+                    cause: status.BAD_REQUEST
+                })
+            }
             return FormatData({goods});
         } catch(err) {
             throw err;

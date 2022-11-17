@@ -35,7 +35,7 @@ class GoodsController {
         }
     }
 
-    // [GET] /api/v1/goods/good/:id
+    // [GET] /api/v1/goods/:id
     getGoodByID = async(req, res, next) => {
         try{
             //lấy thông tin hàng được gửi lên từ form
@@ -54,7 +54,26 @@ class GoodsController {
         }
     }
 
-    // [POST] /api/v1/goods/update/:id
+     // [GET] /api/v1/goods/type/:dishType
+    getGoodsByType = async(req, res, next) => {
+        try{
+            //lấy thông tin hàng được gửi lên từ form
+            const _dishType = req.params.dishType;
+
+            // Tạo và thêm hàng hóa vào lưu trữ
+            const good = await goodsService.getGoodsByType(_dishType);
+
+            //trả json về cho người dùng
+            res.status(status.OK).json({
+                message: 'Get good infomation successfully.',
+                data: good,
+            });
+        }catch(err) {
+            next(err);
+        }
+    }
+
+    // [POST] /api/v1/goods/:id
     updateGoodByID = async(req, res, next) => {
         try {
             const _id = req.params.id;
@@ -70,7 +89,7 @@ class GoodsController {
         }
     }
 
-    // [POST] /api/v1/goods/delete/:id
+    // [POST] /api/v1/goods/:id
     deleteGoodByID = async(req, res, next) => {
         try {
             const _id = req.params.id;
