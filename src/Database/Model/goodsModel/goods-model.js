@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const mongoose_delete = require('mongoose-delete');
 
-const {Schema, model} = mongoose;
+const { Schema, model } = mongoose;
 
 const Goods = new Schema({
     name: {
@@ -16,6 +16,7 @@ const Goods = new Schema({
     },
     product: {
         type: Number,
+        default: 0
     },
     type: {
         type: String,

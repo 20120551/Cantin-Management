@@ -1,5 +1,5 @@
 // import some repository here
-const { status } = require('./../Constant');
+const { status, restrict } = require('./../Constant');
 const { FormatData } = require('../Utils');
 const { orderRepository } = require('./../Database');
 const { convertParticularTimeStringToDate } = require('./../Utils');
@@ -30,8 +30,9 @@ const orderService = {
     },
     getOrderByTime: async (date) => {
         try {
-            const startDate = convertParticularTimeStringToDate('7h 30m', new Date(date));
-            const endDate = convertParticularTimeStringToDate('19h 30m', new Date(date));
+            const times = restrict.CLOSE_STORE.split('-');
+            const startDate = convertParticularTimeStringToDate(times[1], new Date(date));
+            const endDate = convertParticularTimeStringToDate(times[0], new Date(date));
 
             const orders = await orderRepository.getOrderBetweenAInterval(startDate, endDate);
             if (!orders) {

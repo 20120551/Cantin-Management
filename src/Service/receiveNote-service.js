@@ -37,8 +37,8 @@ const goodsService = {
     },
     getNotesByDate: async (date) => {
         try {
-            const startDate = convertParticularTimeStringToDate('7h 30m', new Date(date));
-            const endDate = convertParticularTimeStringToDate('19h 30m', new Date(date));
+            const startDate = convertParticularTimeStringToDate('7h30m', new Date(date));
+            const endDate = convertParticularTimeStringToDate('19h30m', new Date(date));
             let notes = await receiveNoteRepository.getNotesByDate(startDate, endDate);
             if (!notes) {
                 throw new Error('No notes found.', {

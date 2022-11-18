@@ -1,22 +1,20 @@
-const {goodsRepository} = require('./../Database');
-const {mainDishRepository} = require('./../Database');
-const {sideDishRepository} = require('./../Database');
-const {status} = require('./../Constant');
-const {FormatData} = require('./../Utils');
+const { goodsRepository } = require('./../Database');
+const { mainDishRepository } = require('./../Database');
+const { sideDishRepository } = require('./../Database');
+const { status } = require('./../Constant');
+const { FormatData } = require('./../Utils');
 
 const goodsService = {
-    addGood: async(goodInfo) => {
+    addGood: async (goodInfo) => {
         try {
             let _dishType;
-            if (goodInfo.type === 'mainDish')
-            {
+            if (goodInfo.type === 'mainDish') {
                 //tạo mặc định 1 main dish
-                _dishType =  await mainDishRepository.createDefault(goodInfo.goodsType);
+                _dishType = await mainDishRepository.createDefault(goodInfo.goodsType);
             }
-            else
-            {
+            else {
                 //tạo mặc định 1 side dish
-                _dishType =  await sideDishRepository.createDefault(goodInfo.goodsType);
+                _dishType = await sideDishRepository.createDefault(goodInfo.goodsType);
             }
 
             // thêm hàng
@@ -29,12 +27,12 @@ const goodsService = {
                 goodsType: _dishType
             });
 
-            return FormatData({good});
-        } catch(err) {
+            return FormatData({ good });
+        } catch (err) {
             throw err;
         }
     },
-    updateGoodByID: async(id, goodInfo) => {
+    updateGoodByID: async (id, goodInfo) => {
         try {
             let good = await goodsRepository.getGoodsById(id);
             if (!good) {
@@ -43,83 +41,83 @@ const goodsService = {
                 })
             }
             good = await goodsRepository.updateGoodByID(id, goodInfo);
-            return FormatData({good});
-        } catch(err) {
+            return FormatData({ good });
+        } catch (err) {
             throw err;
         }
     },
-    deleteGoodByID: async(id) => {
+    deleteGoodByID: async (id) => {
         try {
             let good = await goodsRepository.getGoodsById(id);
-            if(!good) {
+            if (!good) {
                 throw new Error('Goods does not exist.', {
                     cause: status.BAD_REQUEST
                 })
             }
             good = await goodsRepository.deleteGoodByID(id);
-            return FormatData({good});
-        } catch(err) {
+            return FormatData({ good });
+        } catch (err) {
             throw err;
         }
     },
 
-    getGoodsById: async(id) => {
+    getGoodsById: async (id) => {
         try {
             let goods = await goodsRepository.getGoodsById(id);
-            if(!goods) {
+            if (!goods) {
                 throw new Error('Goods does not exist.', {
                     cause: status.BAD_REQUEST
                 })
             }
             goods = await goods.populate('goodsType');
-            return FormatData({goods});
-        } catch(err) {
+            return FormatData({ goods });
+        } catch (err) {
             throw err;
         }
     },
-    getGoodsByType: async(type) => {
+    getGoodsByType: async (type) => {
         try {
             let goods = await goodsRepository.getGoodsByType(type);
-            if(!goods) {
+            if (!goods) {
                 throw new Error('Goods does not exist.', {
                     cause: status.BAD_REQUEST
                 })
             }
-            return FormatData({goods});
-        } catch(err) {
+            return FormatData({ goods });
+        } catch (err) {
             throw err;
         }
     },
-    getStoreRoom: async() => {
+    getStoreRoom: async () => {
         try {
-            let storeroom = await goodsRepository.getStoreRoom();
-            if(!storeroom) {
+            let storeRoom = await goodsRepository.getStoreRoom();
+            if (!storeRoom) {
                 throw new Error('There no goods in the store', {
                     cause: status.BAD_REQUEST
                 })
             }
-            return FormatData({storeroom});
-        } catch(err) {
+            return FormatData({ storeRoom });
+        } catch (err) {
             throw err;
         }
     },
-    updateProductAmountOnSell: async(id, product) => {
+    updateProductAmountOnSell: async (id, product) => {
         try {
             let goods = await goodsRepository.updateProductAmountOnSell(id, product);
-            if(!goods) {
+            if (!goods) {
                 throw new Error('goods does not exist', {
                     cause: status.BAD_REQUEST
                 })
             }
-            return FormatData({goods});
-        } catch(err) {
+            return FormatData({ goods });
+        } catch (err) {
             throw err;
         }
     },
-    resetProductOfMainDish: async() => {
+    resetProductOfMainDish: async () => {
         try {
             await goodsRepository.resetProductOfMainDish();
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     }

@@ -1,7 +1,7 @@
-const {status, expire, restrict} = require('./../Constant');
-const {cartRepository, goodsRepository} = require('./../Database');
+const { status, expire, restrict } = require('./../Constant');
+const { cartRepository, goodsRepository } = require('./../Database');
 const {
-    convertStringToDate, 
+    convertStringToDate,
     convertParticularTimeStringToDate,
     RelativeOfCurrentDayAndScheduleDay
 } = require('./../Utils');
@@ -10,7 +10,7 @@ const Schedule = require('./../Schedule');
 const schedule = new Schedule();
 
 const shoppingMDW = {
-    preventUserOnRushHour: async(req, res, next) => {
+    preventUserOnRushHour: async (req, res, next) => {
         try {
             // lấy thời gian hiện tại
             const currentTime = new Date();
@@ -22,15 +22,16 @@ const shoppingMDW = {
             let startcloseStoreTime = convertParticularTimeStringToDate(startCloseStore);
             let endcloseStoreTime = convertParticularTimeStringToDate(endCloseStore);
             // kiểm tra xem thời gian lên lịch là của ngày cũ hay ngày mới
-            if(RelativeOfCurrentDayAndScheduleDay(endcloseStoreTime)) {
+            if (RelativeOfCurrentDayAndScheduleDay(endcloseStoreTime)) {
                 // kiểm tra từ 0h00 - 7h30
-                startcloseStoreTime = convertParticularTimeStringToDate('0h00');
+                startcloseStoreTime = convertParticularTimeStringToDate('0h0m');
             } else {
                 // kiểm tra từ 19h30 - 23h59
-                endcloseStoreTime = convertParticularTimeStringToDate('23h59');
+                endcloseStoreTime = convertParticularTimeStringToDate('23h59m');
             }
+            console.log(startcloseStoreTime, endcloseStoreTime, currentTime)
             // lấy ngày hôm sau, sau đó set lại lúc 7h30
-            if(currentTime > startcloseStoreTime || currentTime < endcloseStoreTime) {
+            if (currentTime > startcloseStoreTime && currentTime < endcloseStoreTime) {
                 return res.status(status.BAD_REQUEST).json({
                     message: 'Our store was closed, Please come back at 7h30 am',
                     data: null
@@ -58,26 +59,26 @@ const shoppingMDW = {
                 ? true : false;
 
             // kiểm tra nếu thời gian mua valid
-            if(isValidMorningShift || isValidAfternoonShift) {
+            if (isValidMorningShift || isValidAfternoonShift) {
                 return next();
             }
 
             // Thời gian cho phép mua món nước 7h00 - 19h00
-            const {goodsId} = req.body;
+            const { goodsId } = req.body;
             const goods = await goodsRepository.getGoodsById(goodsId);
-            const {type} = goods;
-            if(type === 'mainDish') {
+            const { type } = goods;
+            if (type === 'mainDish') {
                 return res.status(status.UN_AUTHORIZED).json({
                     message: `main dish just valid for buying between ${morningShift} and ${afternoonShift}`,
                     data: null
                 })
             }
             next();
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     },
-    addCookieAutomatically: async(req, res, next) => {
+    addCookieAutomatically: async (req, res, next) => {
         try {
             const cartId = req.cookies.cart;
             if (cartId) {
@@ -96,11 +97,11 @@ const shoppingMDW = {
             })
 
             // remove cart automatically after the particular time by using node-schedule
-            schedule.expireCart(expireCookieDate ,cart._id);
+            schedule.expireCart(expireCookieDate, cart._id);
 
             req.cart = cart._id;
             next();
-        } catch(err) {
+        } catch (err) {
             res.status(status.BAD_REQUEST).json({
                 message: err.message
             });
