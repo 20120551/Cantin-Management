@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 
-const {Schema, model} = mongoose;
+const { Schema, model } = mongoose;
 
 const SideDish = new Schema({
     capacity: {
-        type: Number
+        type: Number,
+        min: [0, 'Capacity must greater than 0'],
+        defautl: 0
     }
 });
 

@@ -127,22 +127,22 @@ module.exports.changePassMail = (payload) => {
 }
 
 module.exports.paymentSuccess = (payload) => {
-    console.log(payload);
     const {
+        _id,
         receiver,
         timeReceive,
         goods,
         totalPrice
     } = payload;
-    const timeFormat = timeReceive.toLocaleDateString('de-DE', { 
-        year: 'numeric', 
-        month: '2-digit', 
+    const timeFormat = timeReceive.toLocaleDateString('de-DE', {
+        year: 'numeric',
+        month: '2-digit',
         day: '2-digit',
         hour: 'numeric',
         minute: 'numeric'
     })
-    const vietnameseCurrency = totalPrice.toString().toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
-    const goodsTable = goods.map((goods)=>{
+    const vietnameseCurrency = totalPrice.toString().toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+    const goodsTable = goods.map((goods) => {
         const {
             _id: goodsInfo,
             quantity
@@ -195,6 +195,7 @@ module.exports.paymentSuccess = (payload) => {
                             <div class="student" style="box-sizing: border-box;margin: 0;padding: 0;margin-top: 20px;">
                                 <h3 style="box-sizing: border-box;margin: 0;padding: 0;font-size: 24px;margin-bottom: 10px;">Thông tin cá nhân</h3>
                                 <div class="student-content" style="box-sizing: border-box;margin: 0;padding: 0;">
+                                    <p style="box-sizing: border-box;margin: 0;padding: 0;margin-left: 20px;">Mã hóa đơn: <strong style="box-sizing: border-box;margin: 0;padding: 0;">${_id}</strong></p>
                                     <p style="box-sizing: border-box;margin: 0;padding: 0;margin-left: 20px;">Họ & tên: <strong style="box-sizing: border-box;margin: 0;padding: 0;">${receiver.studentName}</strong></p>
                                     <p style="box-sizing: border-box;margin: 0;padding: 0;margin-left: 20px;">MSSV: <strong style="box-sizing: border-box;margin: 0;padding: 0;">${receiver.studentId}</strong></p>
                                     <p style="box-sizing: border-box;margin: 0;padding: 0;margin-left: 20px;">Thời gian nhận: <strong style="box-sizing: border-box;margin: 0;padding: 0;">${timeFormat}</strong></p>
@@ -231,5 +232,5 @@ module.exports.paymentSuccess = (payload) => {
             </html>
         `)
     }
-    return {data};
+    return { data };
 }

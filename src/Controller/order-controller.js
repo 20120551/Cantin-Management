@@ -1,19 +1,21 @@
 // import some service here
-const {status, expire} = require('./../Constant');
-const {convertStringToDate} = require('./../Utils');
+const { status, expire } = require('./../Constant');
+const { convertStringToDate } = require('./../Utils');
+const { orderService } = require('./../Service');
 
 class OrderController {
     constructor(paymentThirdParty) {
         this.paymentThirdParty = paymentThirdParty;
     }
-    createOrder = async(req, res, next) => {
+    createOrder = async (req, res, next) => {
         try {
+            const _paymentThirdParty = this.paymentThirdParty.clone();
             const cartId = req.cart || req.cookies.cart;
             let payload = {
                 cartId,
                 data: req.body
             }
-            const {order: waitingOrder, qrCode} = await this.paymentThirdParty.execPayment(payload);
+            const { order: waitingOrder, qrCode } = await _paymentThirdParty.execPayment(payload);
             // set cookie của cart và order với 10p kể từ thời điểm bắt đầu thanh toán
             const dateExpire = convertStringToDate(expire.UN_PAY);
 
@@ -24,7 +26,7 @@ class OrderController {
                 expires: dateExpire
             });
 
-            res.cookie('order', waitingOrder._id, {
+            res.cookie('order', waitingOrder.id, {
                 secure: false,
                 httpOnly: true,
                 sameSite: "strict",
@@ -34,7 +36,7 @@ class OrderController {
             payload = {
                 order: waitingOrder
             }
-            const {order} = await this.paymentThirdParty.execPayment(payload);
+            const { order } = await _paymentThirdParty.execPayment(payload);
             res.status(status.OK).json({
                 message: 'waiting for payment',
                 data: {
@@ -42,23 +44,47 @@ class OrderController {
                     qrCode
                 }
             })
-        } catch(err) {
+        } catch (err) {
             next(err);
         }
     }
-    orderResult = async(req, res, next) => {
+    getOrderById = async (req, res, next) => {
         try {
-            const {result} = req.params;
+            const { orderId } = req.params;
+            const { order } = await orderService.getOrder(orderId);
+            res.status(status.OK).json({
+                message: 'get order by id successfully',
+                data: order
+            })
+        } catch (err) {
+            next(err);
+        }
+    }
+    getOrderByDate = async (req, res, next) => {
+        try {
+            const { date } = req.body;
+            const { orders } = await orderService.getOrderByTime(date);
+            res.status(status.OK).json({
+                message: 'get order by id successfully',
+                data: orders
+            })
+        } catch (err) {
+            next(err);
+        }
+    }
+    orderResult = async (req, res, next) => {
+        try {
+            const { result } = req.params;
             const cartId = req.cart || req.cookies.cart;
             const orderId = req.cookies.order;
 
             this.paymentThirdParty.setState(this.paymentThirdParty[`${result}State`]);
             const payload = {
-                order: {_id: orderId},
-                cart: {_id: cartId}
+                order: { _id: orderId },
+                cart: { _id: cartId }
             }
 
-            const {order} = await this.paymentThirdParty.execPayment(payload);
+            const { order } = await this.paymentThirdParty.execPayment(payload);
 
             // xóa cookie
             res.clearCookie('order');
@@ -68,7 +94,7 @@ class OrderController {
                 message: `order pay ${result}`,
                 data: order
             })
-        } catch(err) {
+        } catch (err) {
             next(err);
         }
     }

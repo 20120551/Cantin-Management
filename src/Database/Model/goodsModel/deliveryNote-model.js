@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const {Schema, model} = mongoose;
+const { Schema, model } = mongoose;
 
 const DeliveryNote = new Schema({
     goods: [{
@@ -17,6 +17,7 @@ const DeliveryNote = new Schema({
     }],
     createAt: {
         type: Date,
+        default: new Date()
     }
 });
 

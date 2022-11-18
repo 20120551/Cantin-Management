@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const {Schema, model} = mongoose;
+const { Schema, model } = mongoose;
 
 const ReceiveNote = new Schema({
     goods: [{
@@ -17,6 +17,7 @@ const ReceiveNote = new Schema({
     }],
     createAt: {
         type: Date,
+        default: new Date()
     },
     totalPrice: {
         type: Number

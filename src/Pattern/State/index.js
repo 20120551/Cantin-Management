@@ -13,18 +13,22 @@ class PaymentThirdParty {
         this.currentState = this.waitingState;
     }
 
-    execPayment = async(payload) => {
+    execPayment = async (payload) => {
         try {
             const response = await this.currentState.execPayment(payload);
             console.log('current state: ', this.currentState.toString());
             return response;
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     }
 
-    setState = async(state) => {
+    setState = (state) => {
         this.currentState = state;
+    }
+
+    clone = () => {
+        return new PaymentThirdParty();
     }
 }
 

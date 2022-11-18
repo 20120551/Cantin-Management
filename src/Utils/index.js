@@ -1,5 +1,5 @@
 const {
-    GenerateSalt, 
+    GenerateSalt,
     GeneratePassword,
     ValidatePassword,
     GenerateToken,
@@ -7,7 +7,8 @@ const {
     FormatData,
     ValidateSignature,
     RandomNumber,
-    RelativeOfCurrentDayAndScheduleDay
+    RelativeOfCurrentDayAndScheduleDay,
+    makeid
 } = require('./handleData');
 
 const {
@@ -24,7 +25,7 @@ const {
 } = require('./converter');
 
 module.exports = {
-    GenerateSalt, 
+    GenerateSalt,
     GeneratePassword,
     ValidatePassword,
     GenerateToken,
@@ -39,5 +40,6 @@ module.exports = {
     convertDateToCron,
     convertParticularTimeStringToDate,
     convertStringToMilisecond,
-    RelativeOfCurrentDayAndScheduleDay
+    RelativeOfCurrentDayAndScheduleDay,
+    makeid
 }

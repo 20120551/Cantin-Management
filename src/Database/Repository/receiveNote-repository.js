@@ -1,36 +1,34 @@
-const {ReceiveNote} = require('./../Model');
-const {SideDish} = require('./../Model');
-const {Goods} = require('./../Model');
+const { ReceiveNote } = require('./../Model');
+const { SideDish } = require('./../Model');
+const { Goods } = require('./../Model');
 
 const receiveNoteRepository = {
-    getReceiveNotesBetweenAInterval: async(startDate, endDate) => {
+    getReceiveNotesBetweenAInterval: async (startDate, endDate) => {
         try {
             const receiveNotes = await ReceiveNote.find({
                 createAt: {
                     $gte: startDate,
-                    $lt: endDate 
+                    $lt: endDate
                 }
             })
             return receiveNotes;
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     },
     // Tạo phiếu mới
-    addNote: async({goods, createAt, totalPrice})=> {
+    addNote: async ({ goods, createAt, totalPrice }) => {
         try {
 
             for (let i = 0; i < goods.length; i++) {
-                try 
-                {
+                try {
                     let good = await Goods.findById(goods[i].goodsInfo);
-                    if (good.type === 'sideDish')
-                    {
-                        await SideDish.findByIdAndUpdate(good.goodsType, { 
-                            $inc : {capacity : parseInt(goods[i].quantity)} 
-                        },{new:true});  
+                    if (good.type === 'sideDish') {
+                        await SideDish.findByIdAndUpdate(good.goodsType, {
+                            $inc: { capacity: parseInt(goods[i].quantity) }
+                        }, { new: true });
                     }
-                } catch(err) { 
+                } catch (err) {
                     throw err;
                 }
             }
@@ -46,58 +44,71 @@ const receiveNoteRepository = {
             const result = await note.save();
             await result.populate({
                 path: 'goods',
-                populate: { path: 'goodsInfo',
-                            populate: { path: 'goodsType' } }
+                populate: {
+                    path: 'goodsInfo',
+                    populate: { path: 'goodsType' }
+                }
             });
             return result;
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     },
-    getNoteById: async(id) => {
+    getNoteById: async (id) => {
         try {
-            const note = await ReceiveNote.findById({_id: id});
+            const note = await ReceiveNote.findById({ _id: id });
             await note.populate({
                 path: 'goods',
-                populate: { path: 'goodsInfo',
-                            populate: { path: 'goodsType' } }
+                populate: {
+                    path: 'goodsInfo',
+                    populate: { path: 'goodsType' }
+                }
             });
             return note;
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     },
-    getNotesByDate: async(date) => {
+    getNotesByDate: async (startDate, endDate) => {
         try {
-            const notes = await ReceiveNote.find({createAt: date}).exec();
+            const notes = await ReceiveNote.find({
+                createAt: {
+                    $gte: startDate,
+                    $lt: endDate
+                }
+            });
             for (let i = 0; i < notes.length; i++) {
                 await notes[i].populate({
                     path: 'goods',
-                    populate: { path: 'goodsInfo',
-                                populate: { path: 'goodsType' } }
+                    populate: {
+                        path: 'goodsInfo',
+                        populate: { path: 'goodsType' }
+                    }
                 });
             }
             return notes;
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     },
-    getStoreRoom: async() => {
+    getStoreRoom: async () => {
         try {
             const storeroom = await ReceiveNote.find({});
             for (let i = 0; i < storeroom.length; i++) {
                 await storeroom[i].populate({
                     path: 'goods',
-                    populate: { path: 'goodsInfo',
-                                populate: { path: 'goodsType' } }
+                    populate: {
+                        path: 'goodsInfo',
+                        populate: { path: 'goodsType' }
+                    }
                 });
             }
             return storeroom;
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     },
-     
+
 }
 
 module.exports = receiveNoteRepository;

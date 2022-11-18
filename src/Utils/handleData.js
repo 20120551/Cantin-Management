@@ -6,37 +6,37 @@ const { ACCESS_TOKEN } = require('../config');
 const saltAround = 10;
 
 //generate salt to hash
-module.exports.GenerateSalt = async()=>{
+module.exports.GenerateSalt = async () => {
     return await bcrypt.genSalt(saltAround);
 }
 
 //generate hash password
-module.exports.GeneratePassword = async(password, salt)=>{
+module.exports.GeneratePassword = async (password, salt) => {
     return await bcrypt.hash(password, salt);
 }
 
 //validation enter password and hash password stored in database
-module.exports.ValidatePassword = async(enterPassword, hashPassword)=>{
+module.exports.ValidatePassword = async (enterPassword, hashPassword) => {
     const match = await bcrypt.compare(enterPassword, hashPassword);
-    if(match) return true;
+    if (match) return true;
     return false;
 }
 
 //generate Token
-module.exports.GenerateToken = (payload, encode, expire = '30d')=> {
-    const token = jwt.sign({...payload}, encode, {expiresIn: expire});
+module.exports.GenerateToken = (payload, encode, expire = '30d') => {
+    const token = jwt.sign({ ...payload }, encode, { expiresIn: expire });
     return token;
 }
 
 //validation signature
-module.exports.ValidateSignature = (req)=>{
+module.exports.ValidateSignature = (req) => {
     const token = req.headers.authorization;
     //check valid of token
-    if(token) {
+    if (token) {
         try {
-    
+
             const accessToken = token.split(' ')[1];
-    
+
             //verify token
             const decode = jwt.verify(accessToken, ACCESS_TOKEN);
 
@@ -44,25 +44,25 @@ module.exports.ValidateSignature = (req)=>{
             req.user = decode;
             return true;
         }
-        catch(err){
+        catch (err) {
             return false;
         }
     }
 }
 
 //random number 
-module.exports.RandomNumber = (quantityNumber)=>{
-    return parseInt(Math.random() * 10**quantityNumber);
+module.exports.RandomNumber = (quantityNumber) => {
+    return parseInt(Math.random() * 10 ** quantityNumber);
 }
 
 //verify token
-module.exports.VerifyToken = (token, decode)=>{
+module.exports.VerifyToken = (token, decode) => {
     return jwt.verify(token, decode);
 }
 
 //format data
-module.exports.FormatData = (data)=>{
-    if(data) {
+module.exports.FormatData = (data) => {
+    if (data) {
         return { ...data };
     }
     throw new Error('Data Not found!');
@@ -76,5 +76,13 @@ module.exports.RelativeOfCurrentDayAndScheduleDay = (date) => {
     // đang ở ngày cũ
     return isNewDate;
 }
-
-
+// tạo id
+module.exports.makeid = (prefix, length) => {
+    var result = '';
+    var characters = '0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return prefix + result;
+}

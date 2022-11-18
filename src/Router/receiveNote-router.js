@@ -1,12 +1,13 @@
 const express = require('express');
-const {ReceiveNoteController} = require('./../Controller');
+const { ReceiveNoteController } = require('./../Controller');
+const { authorizationMDW } = require('./../Middleware');
 
 const router = express.Router();
 const receiveNoteController = new ReceiveNoteController();
 
-router.get('/saved', receiveNoteController.getStoreRoom);
-router.post('/addNote', receiveNoteController.addNote);
-router.get('/:id',receiveNoteController.getNoteByID);
-router.get('/many/:date',receiveNoteController.getNotesByDate);
+router.get('/saved', authorizationMDW.checkPermission, receiveNoteController.getStoreRoom);
+router.post('/saved', authorizationMDW.checkPermission, receiveNoteController.getNotesByDate);
+router.post('/addNote', authorizationMDW.checkPermission, receiveNoteController.addNote);
+router.get('/:id', authorizationMDW.checkPermission, receiveNoteController.getNoteByID);
 
 module.exports = router;

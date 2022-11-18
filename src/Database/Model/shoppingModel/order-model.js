@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 
-const {Schema, model} = mongoose;
+const { Schema, model } = mongoose;
 
 const Order = new Schema({
+    _id: {
+        type: String,
+    },
     createAt: {
         type: Date,
         default: new Date()
@@ -35,6 +38,6 @@ const Order = new Schema({
     timeReceive: {
         type: Date,
     }
-});
+}, { _id: false });
 
 module.exports = model('order', Order);
