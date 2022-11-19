@@ -1,13 +1,12 @@
-import axios from 'axios';
-const API_URL = 'http://localhost:8800/api/v1/auth';
+import axios from './../lib/axios';
 
 export const login = async (username, password) => {
     try {
-        const response = await axios.post(`${API_URL}/login`, {
+        const response = await axios.post('/auth/login', {
             username,
             password
         })
-        return response;
+        return response?.data;
     } catch (err) {
         // do something with err
     }

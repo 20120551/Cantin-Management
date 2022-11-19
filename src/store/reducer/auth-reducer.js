@@ -1,23 +1,30 @@
 import { auth } from './../../constant';
-import { authService } from './../../services';
 
+const accessToken = JSON.parse(localStorage.getItem('accessToken'));
+const roles = JSON.parse(localStorage.getItem('roles'));
 const authInitialState = {
-    accessToken: '',
-    roles: ['admin']
+    accessToken: accessToken || '',
+    roles: roles || []
 }
 
-const authReducer = async (state, action) => {
+const authReducer = (state, action) => {
     switch (action.type) {
         case auth.LOGIN:
             //call api to server
             const {
-                username,
-                password
+                user,
+                accessToken = ''
             } = action.payload;
+            // lưu vào local storage
+            localStorage.setItem('accessToken', JSON.stringify(accessToken));
+            localStorage.setItem('roles', JSON.stringify([user.role]));
 
-            const response = await authService.login(username, password);
-            console.log(response);
-            return { ...state }
+            return { accessToken, roles: [user.role] };
+        case auth.LOGOUT:
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('roles');
+            return { accessToken: '', roles: [] };
+        // refresh token case
         default:
             return { ...state }
     }
