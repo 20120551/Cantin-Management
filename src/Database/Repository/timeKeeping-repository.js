@@ -25,9 +25,16 @@ const timeKeepingRepository = {
     },
     check: async(info) => {
         try {
-            const timeKeeping = await TimeKeeping.findOneAndUpdate({userId: info.userId,
-                workDays: {_id: info.assignmentId, check: false }},{"workDays.$": {_id:info.assignmentId,check: true}});    
-            console.log(timeKeeping);
+            const timeKeeping = await TimeKeeping.findOneAndUpdate({userId: info.userId}, {
+                $set: {
+                    'workDays.$[elem].check': true
+                }
+            }, {
+                arrayFilters: [{
+                    'elem._id': info.assignmentID
+                }],
+                new: true
+            });
             return timeKeeping;
         } catch(err) {
             throw err;

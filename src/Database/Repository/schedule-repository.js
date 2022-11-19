@@ -14,13 +14,11 @@ const scheduleRepository = {
     assignment: async ({assignmentDate, shiftId, userId}) => {
         try {
             let result;
-            console.log(shiftId);
             result = await Assignment.findOneAndUpdate(
                 { assignmentDate: assignmentDate, shiftId: shiftId }, 
                 { $set: { userID: userId }}, 
                 { new: true}
                 );
-            console.log(result);
             if (result === null)
             {
                 //generate assignment
