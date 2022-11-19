@@ -8,4 +8,7 @@ module.exports = {
     bStatisticService: require('./bStatistic-service'),
     deliveryNoteService: require('./deliveryNote-service'),
     receiveNoteService: require('./receiveNote-service'),
+    scheduleService: require('./schedule-service'),
+    shiftService: require('./shift-service'),
+    timeKeepingService: require('./timeKeeping-service')
 }

@@ -8,4 +8,7 @@ module.exports = {
     GoodsController: require('./goods-controller'),
     DeliveryNoteController: require('./deliveryNote-controller'),
     ReceiveNoteController: require('./receiveNote-controller'),
+    ScheduleController: require('./schedule-controller'),
+    ShiftController: require('./shift-controller'),
+    TimeKeepingController: require('./timeKeeping-controller'),
 }

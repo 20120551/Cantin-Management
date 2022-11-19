@@ -24,6 +24,11 @@ const {
     convertStringToMilisecond
 } = require('./converter');
 
+const {
+    getLastDate,
+    getFirstDate
+} = require('./date');
+
 module.exports = {
     GenerateSalt,
     GeneratePassword,
@@ -41,5 +46,7 @@ module.exports = {
     convertParticularTimeStringToDate,
     convertStringToMilisecond,
     RelativeOfCurrentDayAndScheduleDay,
-    makeid
+    makeid,
+    getLastDate,
+    getFirstDate
 }

@@ -11,5 +11,8 @@ module.exports = {
     bStatisticRepository: require('./Repository/bStatistic-repository'),
     receiveNoteRepository: require('./Repository/receiveNote-repository'),
     deliveryNoteRepository: require('./Repository/deliveryNote-repository'),
+    scheduleRepository: require('./Repository/schedule-repository'),
+    shiftRepository: require('./Repository/shift-repository'),
+    timeKeepingRepository: require('./Repository/timeKeeping-repository'),
     connectToMongoDb: require('./dbConnection'),
 }

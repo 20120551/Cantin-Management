@@ -7,7 +7,9 @@ const bStasticRouter = require('./bStatitstic-router');
 const goodsRouter = require('./goods-router');
 const deliveryNoteRouter = require('./deliveryNote-router');
 const receiveNoteRouter = require('./receiveNote-router');
-
+const scheduleRouter = require('./schedule-router');
+const shiftRouter = require('./shift-router');
+const timeKeepingRouter = require('./timeKeeping-router');
 
 module.exports = function(app) {
     app.use('/api/v1/auth', authRouter);
@@ -19,4 +21,7 @@ module.exports = function(app) {
     app.use('/api/v1/goods', goodsRouter);
     app.use('/api/v1/delivery', deliveryNoteRouter);
     app.use('/api/v1/receive', receiveNoteRouter);
+    app.use('/api/v1/schedule', scheduleRouter);
+    app.use('/api/v1/shift', shiftRouter);
+    app.use('/api/v1/timeKeeping', timeKeepingRouter);
 }

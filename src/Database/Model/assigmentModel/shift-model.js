@@ -4,10 +4,10 @@ const {Schema, model} = mongoose;
 
 const Shift = new Schema({
     start: {
-        type: Date,
+        type: String,
     },
     end: {
-        type: Date,
+        type: String,
     },
     name: {
         type: String,
