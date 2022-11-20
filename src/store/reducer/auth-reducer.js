@@ -4,7 +4,8 @@ const accessToken = JSON.parse(localStorage.getItem('accessToken'));
 const roles = JSON.parse(localStorage.getItem('roles'));
 const authInitialState = {
     accessToken: accessToken || '',
-    roles: roles || []
+    roles: roles || [],
+    user: null,
 }
 
 const authReducer = (state, action) => {
@@ -19,7 +20,7 @@ const authReducer = (state, action) => {
             localStorage.setItem('accessToken', JSON.stringify(accessToken));
             localStorage.setItem('roles', JSON.stringify([user.role]));
 
-            return { accessToken, roles: [user.role] };
+            return { accessToken, roles: [user.role], user };
         case auth.LOGOUT:
             localStorage.removeItem('accessToken');
             localStorage.removeItem('roles');

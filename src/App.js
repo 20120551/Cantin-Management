@@ -1,29 +1,13 @@
-import { Link, Routes, Route, useNavigate } from 'react-router-dom';
-import { ProtectRoute, ProtectComponent } from './components/authorization';
+import { Routes, Route } from 'react-router-dom';
+import { ProtectRoute } from './components/authorization';
 import { role } from './config';
-import { useAuth } from './hooks';
-import { auth } from './store/actions';
 import Login from './pages/login';
+import Header from './components/structure/header/header';
+import Footer from './components/structure/footer/footer';
 
 function App() {
-    const navigate = useNavigate();
-    const [authState, authDispatch] = useAuth();
-    const handleLogout = () => {
-        authDispatch(auth.logout());
-        navigate('/login');
-    }
     return (
         <>
-            <Link to='/'>Home</Link>
-            <Link to='/login'>Login</Link>
-            <br></br>
-            <ProtectComponent allowRoles={[role.OWNER]}>
-                <Link to='/create'>Create</Link>
-            </ProtectComponent>
-            <ProtectComponent>
-                <button onClick={handleLogout}>Logout</button>
-            </ProtectComponent>
-
             <Routes>
                 <Route path='/' element={<Home />} />
                 <Route element={<ProtectRoute allowRoles={[role.OWNER]} />}>
@@ -43,7 +27,12 @@ function Unauthorization() {
     return <h1>Unauthorization page</h1>
 }
 function Home() {
-    return <h1>home page</h1>
+    return (
+        <>
+            <Header />
+            <Footer />
+        </>
+    )
 }
 
 export default App;
