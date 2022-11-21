@@ -6,7 +6,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 function Login() {
     const navigate = useNavigate();
-    const location = useLocation();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -23,6 +22,10 @@ function Login() {
     }
     return (
         <>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
             <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
             <button onClick={handleLogin}>Login</button>
