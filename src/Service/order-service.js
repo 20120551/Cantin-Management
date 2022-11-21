@@ -5,9 +5,9 @@ const { orderRepository } = require('./../Database');
 const { convertParticularTimeStringToDate } = require('./../Utils');
 
 const orderService = {
-    createWaitingOrder: async (studentInfo, timeReceive, goods) => {
+    createWaitingOrder: async (studentInfo, timeReceive, goods, qrCode) => {
         try {
-            let order = await orderRepository.createWaitingOrder(studentInfo, timeReceive, goods);
+            let order = await orderRepository.createWaitingOrder(studentInfo, timeReceive, goods, qrCode);
             order = await order.populate('goods._id');
             return FormatData({ order });
         } catch (err) {

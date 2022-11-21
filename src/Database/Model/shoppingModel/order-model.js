@@ -37,6 +37,9 @@ const Order = new Schema({
     },
     timeReceive: {
         type: Date,
+    },
+    qrCode: {
+        type: String
     }
 }, { _id: false });
 

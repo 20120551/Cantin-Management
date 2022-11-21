@@ -8,5 +8,6 @@ module.exports = {
     MAIL_PASSWORD: process.env.MAIL_PASSWORD,
     PROTOTYPE: process.env.PROTOTYPE,
     DOMAIN: process.env.DOMAIN,
+    FE_PORT: process.env.FE_PORT,
     PAYMENT_SECRET_KEY: process.env.PAYMENT_SECRET_KEY
 }

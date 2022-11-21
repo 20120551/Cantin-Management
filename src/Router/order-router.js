@@ -8,7 +8,7 @@ const orderController = new OrderController(paymentThirdParty);
 
 router.post('/create', orderController.createOrder);
 router.get('/result/:result', orderController.orderResult);
-router.get('/:orderId', authorizationMDW.checkPermission, orderController.getOrderById);
-router.get('/', authorizationMDW.checkPermission, orderController.getOrderByDate);
+router.get('/:orderId', orderController.getOrderById);
+router.get('/', authorizationMDW.checkUser, orderController.getOrderByDate);
 
 module.exports = router;

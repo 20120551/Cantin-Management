@@ -1,4 +1,4 @@
-const { PAYMENT_SECRET_KEY, PROTOTYPE, DOMAIN, PORT } = require('./../../Config');
+const { PAYMENT_SECRET_KEY, PROTOTYPE, DOMAIN, FE_PORT } = require('./../../Config');
 const QRCode = require('qrcode');
 const stripe = require('stripe')(PAYMENT_SECRET_KEY);
 const { status, expire } = require('./../../Constant');
@@ -21,7 +21,7 @@ class WaitingState {
                 data,
             } = payload;
             // lấy domain
-            const domain = `${PROTOTYPE}://${DOMAIN}:${PORT}/api/v1/order`;
+            const domain = `${PROTOTYPE}://${DOMAIN}:${FE_PORT}/payment`;
             // lấy hết thông tin sản phẩm trong giỏ hàng
             const { cart: unhandleCart } = await cartService.getCart(cartId);
             // kiểm tra thông tin sản phẩm
@@ -93,7 +93,8 @@ class WaitingState {
                     studentName
                 },
                 _timeReceive,
-                handledCart
+                handledCart,
+                qrCode
             )
 
             // chuyển sang trạng thái pending đợi thanh toán

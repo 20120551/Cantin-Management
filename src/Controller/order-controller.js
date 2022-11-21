@@ -28,7 +28,6 @@ class OrderController {
 
             res.cookie('order', waitingOrder.id, {
                 secure: false,
-                httpOnly: true,
                 sameSite: "strict",
                 expires: dateExpire
             });
@@ -41,7 +40,6 @@ class OrderController {
                 message: 'waiting for payment',
                 data: {
                     order,
-                    qrCode
                 }
             })
         } catch (err) {
