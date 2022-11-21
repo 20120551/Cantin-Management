@@ -68,6 +68,10 @@
     cursor: pointer;
 }
 
+.timeReceive .timeReceive-item.isChoose span {
+    background-color: #02c148;
+}
+
 .exec-approve {
     margin-top: 40px;
     cursor: pointer;

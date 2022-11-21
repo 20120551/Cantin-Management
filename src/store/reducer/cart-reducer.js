@@ -4,14 +4,12 @@ const cartInitialState = [];
 
 const cartReducer = (state, action) => {
     let newState = [];
-    let goodsInfo = null;
+    let goodsId = null;
     let quantity = 0;
     switch (action.type) {
         case cart.GET_CART:
         case cart.ADD_GOODS_TO_CART:
-            const {
-                goods
-            } = action.payload.data;
+            const { goods } = action.payload?.data;
 
             newState = goods.map((goods) => {
                 const {
@@ -26,17 +24,18 @@ const cartReducer = (state, action) => {
             return [...newState]
         case cart.UPDATE_GOODS_ON_CART:
             // lấy thông tin cart
-            goodsInfo = action.payload.data._id;
-            quantity = action.payload.data.quatity;
+            goodsId = action.payload.goodsId;
+            quantity = action.payload.quantity;
             // xử lý logic
-            const index = state.findIndex((goods) => goods._id === goodsInfo._id);
+            const index = state.findIndex((cart) => cart.goods._id === goodsId);
+            console.log(index);
             state[index].quantity = quantity;
             return [...state]
         case cart.REMOVE_GOODS_FROM_CART:
             // lấy thông tin cart
-            goodsInfo = action.payload.data._id;
+            goodsId = action.payload.goodsId;
             // xử lý logic
-            newState = state.filter((goods) => goods._id !== goodsInfo._id);
+            newState = state.filter((cart) => cart.goods._id !== goodsId);
             return [...newState]
         default:
             return [...state]

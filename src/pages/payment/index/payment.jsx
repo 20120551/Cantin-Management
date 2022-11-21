@@ -1,7 +1,26 @@
 import './payment.css';
 import './../../../assets/css/style.css';
 import icons from './../../../assets/icons';
+import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
+import { orderService } from './../../../services';
+import { useNavigate } from 'react-router-dom';
+
 function Payment() {
+    const orderId = Cookies.get('order') || "";
+    const [order, setOrder] = useState(null);
+    const navigate = useNavigate();
+    // const [invalidTime, setInvalidTime] = useState()
+    useEffect(() => {
+        orderService.getOrderById({ orderId })
+            .then((response) => setOrder(response.data))
+            .catch((err) => console.log(err))
+    }, [])
+
+    const deleteOrder = async () => {
+        await orderService.deleteOrder({ orderId });
+        navigate(-1);
+    }
     return (
         <div id="payment">
             <div className="payment-side">
@@ -18,24 +37,27 @@ function Payment() {
                         <img src={icons.bill} alt="" />
                         Số tiền
                     </h4>
-                    <p>20.000đ</p>
+                    <p>{order?.totalPrice}đ</p>
                 </div>
                 <div className="payment-side__order">
                     <h4>
                         <img src={icons.order} alt="" />
                         Đơn hàng
                     </h4>
-                    <p>US24612</p>
+                    <p>{order?._id}</p>
                 </div>
                 <div className="payment-side__state">
                     <h4>
                         <img src={icons.order} alt="" />
                         Trạng thái
                     </h4>
-                    <p>Waiting</p>
+                    <p>{order?.state}</p>
                 </div>
                 {/* viết thêm 1 api cho phép xóa order theo id vẫn giữ cart id trong cookie */}
-                <div className="payment-side__back">
+                <div
+                    className="payment-side__back"
+                    onClick={deleteOrder}
+                >
                     <img src={icons.back} alt="" />
                     Quay lại
                 </div>
@@ -47,7 +69,7 @@ function Payment() {
                 </div>
                 <div className="payment-container__content">
                     <h4>Quét mã để thanh toán</h4>
-                    <img src="https://www.hellotech.com/guide/wp-content/uploads/2020/05/HelloTech-qr-code.jpg" alt="" />
+                    <img src={order?.qrCode} alt="" />
                     <p>
                         Sử dụng App <strong>Stripe</strong> để thanh toán
                     </p>

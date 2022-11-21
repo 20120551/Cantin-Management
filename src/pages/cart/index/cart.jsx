@@ -5,7 +5,7 @@ import { useCart } from './../../../hooks';
 import { cart } from './../../../store/actions';
 import { cartService } from './../../../services';
 import { useEffect } from 'react';
-
+import { Link } from 'react-router-dom';
 
 function Cart() {
     const [cartState, cartDispath] = useCart();
@@ -36,8 +36,12 @@ function Cart() {
                         />)
                     }
                     <div className="cart-btn">
-                        <button className="back-btn">Tiếp tục mua</button>
-                        <button className="pay-btn">Thanh toán</button>
+                        <button className="back-btn">
+                            <Link to='/'>Tiếp tục mua</Link>
+                        </button>
+                        <button className="pay-btn">
+                            <Link to="/cart/approve">Thanh toán</Link>
+                        </button>
                     </div>
                 </>
             }

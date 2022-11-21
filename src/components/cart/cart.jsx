@@ -29,21 +29,21 @@ function CartItem({ isApprove, cartItem }) {
         }
         setProduct(product - 1);
     }
-    const updateGoodsOnCart = () => {
+    const updateGoodsOnCart = async () => {
         if (isUpdate && product !== quantity) {
             const payload = {
                 goodsId: goods._id,
                 quantity: product
             }
             cartService.updateGoodsOnCart(payload)
-                .then((response) => cartDispatch(cart.updateGoodsOnCart(response)))
+                .then(() => cartDispatch(cart.updateGoodsOnCart(payload)))
                 .catch(err => console.log(err))
         }
         setIsUpdate(!isUpdate);
     }
     const deleteGoodsFromCart = () => {
         cartService.removeGoodsFromCart({ goodsId: goods._id })
-            .then((response) => cartDispatch(cart.removeGoodsFromCart(response)))
+            .then(() => cartDispatch(cart.removeGoodsFromCart({ goodsId: goods._id })))
             .catch(err => console.log(err))
     }
     return (

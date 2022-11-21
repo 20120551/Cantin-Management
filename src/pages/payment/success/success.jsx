@@ -1,8 +1,32 @@
 import './success.css';
 import './../../../assets/css/style.css';
 import icons from '../../../assets/icons';
+import { useEffect, useState } from 'react';
+import { orderService } from './../../../services';
 
 function PaySuccess() {
+    const [order, setOrder] = useState({});
+    useEffect(() => {
+        orderService.getOrderResult({ result: 'success' })
+            .then((response) => setOrder(response?.data))
+            .catch((err) => console.log(err))
+    }, [])
+
+    const {
+        _id,
+        receiver,
+        timeReceive,
+        goods,
+        totalPrice
+    } = order;
+
+    const timeFormat = new Date(timeReceive)?.toLocaleDateString('de-DE', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: 'numeric',
+        minute: 'numeric'
+    })
     return (
         <div id="paySuccess">
             <div className="header">
@@ -27,10 +51,10 @@ function PaySuccess() {
                     <div className="student">
                         <h3>Thông tin cá nhân</h3>
                         <div className="student-content">
-                            <p>Mã đơn hàng: <strong>US21612</strong></p>
-                            <p>Họ & tên: <strong>Trần Vĩnh Phúc</strong></p>
-                            <p>MSSV: <strong>20120551</strong></p>
-                            <p>Thời gian nhận: <strong>10h30</strong></p>
+                            <p>Mã đơn hàng: <strong>{_id}</strong></p>
+                            <p>Họ & tên: <strong>{receiver?.studentName}</strong></p>
+                            <p>MSSV: <strong>{receiver?.studentId}</strong></p>
+                            <p>Thời gian nhận: <strong>{timeFormat}</strong></p>
                         </div>
                     </div>
                     <div className="order">
@@ -39,22 +63,30 @@ function PaySuccess() {
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>Loại món</th>
-                                        <th>Tên đơn hàng</th>
+                                        <th>Phân loại</th>
+                                        <th>Tên món ăn</th>
                                         <th>Giá</th>
                                         <th>Số lượng</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Alfreds Futterkiste</td>
-                                        <td>Maria Anders</td>
-                                        <td>Germany</td>
-                                        <td>Germany</td>
-                                    </tr>
+                                    {goods?.map((goods) => {
+                                        const {
+                                            _id: goodsInfo,
+                                            quantity
+                                        } = goods;
+                                        return (
+                                            <tr key={goodsInfo._id}>
+                                                <td>{goodsInfo.type === "mainDish" ? "Món chính" : "Món phụ"}</td>
+                                                <td>{goodsInfo.name}</td>
+                                                <td>{goodsInfo.price}</td>
+                                                <td>{quantity}</td>
+                                            </tr>
+                                        )
+                                    })}
                                     <tr>
                                         <td><strong>Tổng tiền</strong></td>
-                                        <td colSpan="3">100</td>
+                                        <td colSpan="3">{totalPrice}</td>
                                     </tr>
                                 </tbody>
                             </table>
