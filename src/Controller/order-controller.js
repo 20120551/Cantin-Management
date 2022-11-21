@@ -46,6 +46,19 @@ class OrderController {
             next(err);
         }
     }
+    deleteOrder = async (req, res, next) => {
+        try {
+            const { orderId } = req.params;
+            const { order } = await orderService.deleteOrder(orderId);
+            res.clearCookie('order');
+            res.status(status.OK).json({
+                message: 'delete order successfully',
+                data: order
+            })
+        } catch (err) {
+            next(err);
+        }
+    }
     getOrderById = async (req, res, next) => {
         try {
             const { orderId } = req.params;
