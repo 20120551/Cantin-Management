@@ -8,6 +8,6 @@ export const login = async (username, password) => {
         })
         return response?.data;
     } catch (err) {
-        // do something with err
+        throw err;
     }
 }

@@ -28,7 +28,7 @@ function Header() {
             </div>
             <ProtectComponent>
                 <div className="page cart">
-                    <img src={icons.home} className="icon cart-icon" />
+                    <img src={icons.order} className="icon cart-icon" />
                     <Link to='/order'>Vé</Link>
                 </div>
             </ProtectComponent>

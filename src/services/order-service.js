@@ -1,5 +1,5 @@
 import { privateAxios } from './../lib/axios';
-const accessToken = JSON.parse(localStorage.getItem('accessToken'));
+
 
 export const createWaitingOrder = async ({ studentId, studentName, timeReceive }) => {
     try {
@@ -10,7 +10,16 @@ export const createWaitingOrder = async ({ studentId, studentName, timeReceive }
         })
         return response?.data;
     } catch (err) {
-        console.log(err);
+        throw err;
+    }
+}
+
+export const changeOrderState = async ({ orderId, state }) => {
+    try {
+        const response = await privateAxios.post(`/order/${orderId}`, { state });
+        return response?.data;
+    } catch (err) {
+        throw err;
     }
 }
 
@@ -19,7 +28,7 @@ export const getOrderById = async ({ orderId }) => {
         const response = await privateAxios.get(`/order/${orderId}`);
         return response?.data;
     } catch (err) {
-        console.log(err);
+        throw err;
     }
 }
 
@@ -28,22 +37,16 @@ export const getOrderResult = async ({ result, key }) => {
         const response = await privateAxios.get(`/order/result/${result}?key=${key}`);
         return response?.data;
     } catch (err) {
-        console.log(err);
+        throw err;
     }
 }
 
 export const getOrderBydate = async ({ date }) => {
     try {
-        const response = await privateAxios.get('/order', {
-            date
-        }, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
+        const response = await privateAxios.post('/order', { date });
         return response?.data;
     } catch (err) {
-        console.log(err);
+        throw err;
     }
 }
 
@@ -52,6 +55,6 @@ export const deleteOrder = async ({ orderId }) => {
         const response = await privateAxios.delete(`/order/${orderId}`);
         return response?.data;
     } catch (err) {
-        console.log(err);
+        throw err;
     }
 }

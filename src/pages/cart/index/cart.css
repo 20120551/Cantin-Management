@@ -23,9 +23,9 @@
 }
 
 .back-btn {
-    background-color: #D11A2A;
+    background-color: var(--second-color);
 }
 
 .pay-btn {
-    background-color: #02c148;
+    background-color: var(--success-color);
 }

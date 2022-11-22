@@ -37,14 +37,20 @@ function CartItem({ isApprove, cartItem }) {
             }
             cartService.updateGoodsOnCart(payload)
                 .then(() => cartDispatch(cart.updateGoodsOnCart(payload)))
-                .catch(err => console.log(err))
+                .catch(err => {
+                    // thông báo lỗi ở đây
+                    console.log(err)
+                })
         }
         setIsUpdate(!isUpdate);
     }
     const deleteGoodsFromCart = () => {
         cartService.removeGoodsFromCart({ goodsId: goods._id })
             .then(() => cartDispatch(cart.removeGoodsFromCart({ goodsId: goods._id })))
-            .catch(err => console.log(err))
+            .catch(err => {
+                // thông báo lỗi ở đây
+                console.log(err)
+            })
     }
     return (
         <div className="cart-item">

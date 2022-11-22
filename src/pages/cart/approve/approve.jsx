@@ -19,7 +19,10 @@ function CartApprove() {
     useEffect(() => {
         cartService.getAllGoodsOnCart()
             .then((response) => cartDispath(cart.getAllGoodsOnCart(response)))
-            .catch((err) => console.log(err))
+            .catch((err) => {
+                // thông báo lỗi ở đây
+                console.log(err)
+            })
     }, [])
     const totalMoney = useMemo(() => {
         return cartState.reduce((prev, cartItem) => {
@@ -38,7 +41,10 @@ function CartApprove() {
                 .then((response) => {
                     navigate('/payment');
                 })
-                .catch(err => console.log(err))
+                .catch(err => {
+                    // thông báo lỗi ở đây
+                    console.log(err);
+                })
         }
     }
     return (

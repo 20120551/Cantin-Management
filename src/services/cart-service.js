@@ -5,7 +5,7 @@ export const getAllGoodsOnCart = async () => {
         const response = await privateAxios.get('/cart');
         return response?.data;
     } catch (err) {
-        console.log(err);
+        throw err;
     }
 }
 
@@ -17,7 +17,7 @@ export const addGoodsToCart = async ({ goodsId, quantity }) => {
         });
         return response?.data;
     } catch (err) {
-        console.log(err);
+        throw err;
     }
 }
 
@@ -28,7 +28,7 @@ export const updateGoodsOnCart = async ({ goodsId, quantity }) => {
         });
         return response?.data;
     } catch (err) {
-        console.log(err);
+        throw err;
     }
 }
 
@@ -37,6 +37,6 @@ export const removeGoodsFromCart = async ({ goodsId }) => {
         const response = await privateAxios.put(`/cart/${goodsId}`);
         return response?.data;
     } catch (err) {
-        console.log(err);
+        throw err;
     }
 }

@@ -2,6 +2,10 @@
 
 :root {
     --primary-color: #fe2c55;
+    --second-color: #D11A2A;
+    --success-color: #02c148;
+    --edit-color: #f7d113;
+    --cart-color: antiquewhite;
     --footer-height: 12rem;
     --header-height: 60px;
 }

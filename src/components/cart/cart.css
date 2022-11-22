@@ -4,7 +4,7 @@
     flex-direction: row;
     align-items: center;
     justify-self: center;
-    background-color: antiquewhite;
+    background-color: var(--cart-color);
     padding: 20px;
     border-radius: 10px;
     width: 80%;
@@ -72,13 +72,13 @@
 }
 
 .cart-btn__edit {
-    background-color: #24a0ed;
+    background-color: var(--edit-color);
 }
 
 .cart-btn__edit.edit {
-    background-color: #02c148;
+    background-color: var(--success-color);
 }
 
 .cart-btn__delete {
-    background-color: #D11A2A;
+    background-color: var(--second-color);
 }

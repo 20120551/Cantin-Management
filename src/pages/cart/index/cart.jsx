@@ -11,16 +11,23 @@ function Cart() {
     const [cartState, cartDispath] = useCart();
     useEffect(() => {
         // call api lấy cart items
-        // cartService.addGoodsToCart({
-        //     goodsId: '636f61bf59663e1c3d1b6909',
-        //     quantity: 10
-        // })
-        //     .then((response) => cartDispath(cart.addGoodsToCart(response)))
-        //     .catch(err => console.log(err))
+        cartService.addGoodsToCart({
+            goodsId: '636f61bf59663e1c3d1b6909',
+            quantity: 10
+        })
+            .then((response) => {
+                if (response.status < 300 && response.status >= 200) {
+                    cartDispath(cart.addGoodsToCart(response))
+                }
+            })
+            .catch(err => {
+                // thông báo lỗi ở đây
+                console.log(err)
+            })
 
-        cartService.getAllGoodsOnCart()
-            .then((response) => cartDispath(cart.getAllGoodsOnCart(response)))
-            .catch((err) => console.log(err))
+        // cartService.getAllGoodsOnCart()
+        //     .then((response) => cartDispath(cart.getAllGoodsOnCart(response)))
+        //     .catch((err) => console.log(err))
     }, [])
     return (
         <div id="cart">

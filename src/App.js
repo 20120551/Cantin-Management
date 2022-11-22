@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { ProtectRoute } from './components/authorization';
 import { role } from './config';
 import Login from './pages/login';
-import { HomeLayout, CartRoute, PaymentRoute } from './routes';
+import { HomeLayout, CartRoute, PaymentRoute, OrderRoute } from './routes';
 
 function App() {
     return (
@@ -12,7 +12,9 @@ function App() {
                     <Route index element={<Home />} />
                     <Route path='/cart/*' element={<CartRoute />} />
                     <Route path='/payment/*' element={<PaymentRoute />} />
-                    {/* protect router */}
+                    <Route element={<ProtectRoute />}>
+                        <Route path='/order/*' element={<OrderRoute />} />
+                    </Route>
                     <Route element={<ProtectRoute allowRoles={[role.OWNER]} />}>
                         <Route path='/create' element={<Create />} />
                     </Route>

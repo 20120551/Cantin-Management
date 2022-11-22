@@ -13,6 +13,8 @@ const icons = {
     order: require('./order.svg').default,
     back: require('./back.svg').default,
     success: require('./success.svg').default,
+    orderBill: require('./bill.svg').default,
+    date: require('./date.svg').default,
 }
 
 export default icons;
