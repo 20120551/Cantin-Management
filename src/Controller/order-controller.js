@@ -46,6 +46,19 @@ class OrderController {
             next(err);
         }
     }
+    updateOrderState = async (req, res, next) => {
+        try {
+            const { orderId } = req.params;
+            const { state } = req.body;
+            const { order } = await orderService.updateOrderState(orderId, state);
+            res.status(status.OK).json({
+                message: 'update order state successfully',
+                data: order
+            })
+        } catch (err) {
+            next(err);
+        }
+    }
     deleteOrder = async (req, res, next) => {
         try {
             const { orderId } = req.params;
