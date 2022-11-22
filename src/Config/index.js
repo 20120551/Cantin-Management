@@ -9,5 +9,6 @@ module.exports = {
     PROTOTYPE: process.env.PROTOTYPE,
     DOMAIN: process.env.DOMAIN,
     FE_PORT: process.env.FE_PORT,
-    PAYMENT_SECRET_KEY: process.env.PAYMENT_SECRET_KEY
+    PAYMENT_SECRET_KEY: process.env.PAYMENT_SECRET_KEY,
+    PAYMENT_PUBLIC_KEY: process.env.PAYMENT_PUBLIC_KEY
 }
