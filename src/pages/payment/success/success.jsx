@@ -3,13 +3,30 @@ import './../../../assets/css/style.css';
 import icons from '../../../assets/icons';
 import { useEffect, useState } from 'react';
 import { orderService } from './../../../services';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 function PaySuccess() {
     const [order, setOrder] = useState({});
+    const [searchParams] = useSearchParams();
+
+    const key = searchParams.get('session_id');
+    const navigate = useNavigate();
     useEffect(() => {
-        orderService.getOrderResult({ result: 'success' })
-            .then((response) => setOrder(response?.data))
-            .catch((err) => console.log(err))
+        const payload = {
+            key,
+            result: 'success'
+        }
+        console.log(payload);
+        orderService.getOrderResult(payload)
+            .then((response) => {
+                setOrder(response?.data)
+                if (!response?.data) {
+                    navigate('/payment');
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
     }, [])
 
     const {

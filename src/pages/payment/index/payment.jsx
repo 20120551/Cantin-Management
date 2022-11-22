@@ -59,7 +59,7 @@ function Payment() {
                     onClick={deleteOrder}
                 >
                     <img src={icons.back} alt="" />
-                    Quay lại
+                    Hủy thanh toán
                 </div>
             </div>
             <div className="payment-container">

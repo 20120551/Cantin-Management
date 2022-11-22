@@ -23,10 +23,9 @@ export const getOrderById = async ({ orderId }) => {
     }
 }
 
-export const getOrderResult = async ({ result }) => {
+export const getOrderResult = async ({ result, key }) => {
     try {
-        console.log(result);
-        const response = await privateAxios.get(`/order/result/${result}`);
+        const response = await privateAxios.get(`/order/result/${result}?key=${key}`);
         return response?.data;
     } catch (err) {
         console.log(err);
