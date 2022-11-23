@@ -1,19 +1,30 @@
 import './../../assets/css/style.css';
 import './order.css';
 import { orderService } from './../../services';
+import { useEffect, useState } from 'react';
 const mapState = {
     success: "Thanh toán",
     pending: "Chờ thanh toán",
     received: "Đã nhận hàng"
 }
 function OrderItem({ currentItems }) {
+    const [items, setItems] = useState([]);
+    useEffect(() => {
+        setItems(currentItems);
+    }, [currentItems])
+
     const changeOrderState = (orderId) => {
         const payload = {
             orderId,
             state: 'received'
         }
         orderService.changeOrderState(payload)
-            .then((response) => currentItems = response.data)
+            .then((response) => {
+                const order = response.data;
+                const index = items.findIndex((item) => item._id === order._id);
+                items[index].state = order.state;
+                setItems([...items]);
+            })
             .catch((err) => {
                 // xử lý lỗi ở đây
                 console.log(err);
@@ -21,7 +32,7 @@ function OrderItem({ currentItems }) {
     }
     return (
         <>
-            {currentItems && currentItems.map((order) => {
+            {items && items.map((order) => {
                 return (
                     <div
                         className={`orderItem ${order.state}`}

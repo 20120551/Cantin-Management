@@ -16,9 +16,7 @@ function Cart() {
         //     quantity: 10
         // })
         //     .then((response) => {
-        //         if (response.status < 300 && response.status >= 200) {
-        //             cartDispath(cart.addGoodsToCart(response))
-        //         }
+        //         cartDispath(cart.addGoodsToCart(response))
         //     })
         //     .catch(err => {
         //         // thông báo lỗi ở đây
