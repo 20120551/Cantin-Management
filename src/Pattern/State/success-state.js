@@ -1,5 +1,6 @@
-const { FormatData, sendingMail } = require('../../Utils');
+const { FormatData, sendingMail, convertStringToDate } = require('../../Utils');
 const { orderService, cartService } = require('./../../Service');
+const schedule = require('node-schedule');
 
 class SuccessState {
     constructor(paymentThirParty) {
@@ -17,8 +18,11 @@ class SuccessState {
                 _id: orderId
             } = order;
             const { order: updatedOrder } = await orderService.updateOrderState(orderId, 'success');
-            // gửi email thông báo thanh toán thành công cho khách hàng
-            await sendingMail(updatedOrder, 'PAYMENT');
+            // gửi email thông báo thanh toán thành công cho khách hàng sau 2p
+            schedule.scheduleJob(convertStringToDate('1m'), async () => {
+                console.log('sending successful payment mail after 1m')
+                await sendingMail(updatedOrder, 'PAYMENT');
+            })
             // xóa thông tin giỏ hàng
             const {
                 _id: cartId
