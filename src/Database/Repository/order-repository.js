@@ -3,7 +3,7 @@ const { Order } = require('./../Model');
 const { makeid } = require('./../../Utils');
 
 const orderRepository = {
-    createWaitingOrder: async (studentInfo, timeReceive, goods) => {
+    createWaitingOrder: async (studentInfo, timeReceive, goods, qrCode) => {
         const {
             studentName,
             studentId
@@ -29,7 +29,8 @@ const orderRepository = {
                     studentId,
                     studentName,
                 },
-                timeReceive
+                timeReceive,
+                qrCode
             })
             const result = await order.save();
             return result;

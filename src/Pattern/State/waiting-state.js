@@ -1,4 +1,10 @@
-const { PAYMENT_SECRET_KEY, PROTOTYPE, DOMAIN, PORT } = require('./../../Config');
+const {
+    PAYMENT_SECRET_KEY,
+    PROTOTYPE,
+    DOMAIN,
+    FE_PORT,
+    PAYMENT_PUBLIC_KEY
+} = require('./../../Config');
 const QRCode = require('qrcode');
 const stripe = require('stripe')(PAYMENT_SECRET_KEY);
 const { status, expire } = require('./../../Constant');
@@ -6,6 +12,8 @@ const {
     convertParticularTimeStringToDate,
     convertStringToDate,
     FormatData,
+    GenerateSalt,
+    GeneratePassword
 } = require('./../../Utils');
 const { cartService, orderService } = require('./../../Service');
 
@@ -21,7 +29,7 @@ class WaitingState {
                 data,
             } = payload;
             // lấy domain
-            const domain = `${PROTOTYPE}://${DOMAIN}:${PORT}/api/v1/order`;
+            const domain = `${PROTOTYPE}://${DOMAIN}:${FE_PORT}/payment`;
             // lấy hết thông tin sản phẩm trong giỏ hàng
             const { cart: unhandleCart } = await cartService.getCart(cartId);
             // kiểm tra thông tin sản phẩm
@@ -51,6 +59,9 @@ class WaitingState {
                     cause: status.BAD_REQUEST
                 })
             }
+            // tạo 1 key bảo mật cho API thành công
+            const salt = await GenerateSalt();
+            const hash = await GeneratePassword(`${PAYMENT_PUBLIC_KEY}-${cartId}`, salt);
             // tạo 1 session chứa thông tin các sản phẩm thanh toán
             const session = await stripe.checkout.sessions.create({
                 payment_method_types: ['card'],
@@ -68,7 +79,7 @@ class WaitingState {
                     }
                 }),
                 expires_at: convertStringToDate(expire.UN_PAY),
-                success_url: `${domain}/success`,
+                success_url: `${domain}/success?session_id=${hash}`,
                 cancel_url: `${domain}/failure`,
             })
             // tạo QR code liên hết với ngân hàng thanh toán
@@ -93,7 +104,8 @@ class WaitingState {
                     studentName
                 },
                 _timeReceive,
-                handledCart
+                handledCart,
+                qrCode
             )
 
             // chuyển sang trạng thái pending đợi thanh toán

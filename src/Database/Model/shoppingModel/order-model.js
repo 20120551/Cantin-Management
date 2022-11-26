@@ -24,7 +24,7 @@ const Order = new Schema({
     },
     state: {
         type: String,
-        enum: ['sucess', 'failure', 'pending', 'waiting'],
+        enum: ['sucess', 'failure', 'pending', 'waiting', 'received'],
         default: 'waiting'
     },
     receiver: {
@@ -37,6 +37,9 @@ const Order = new Schema({
     },
     timeReceive: {
         type: Date,
+    },
+    qrCode: {
+        type: String
     }
 }, { _id: false });
 

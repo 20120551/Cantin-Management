@@ -3,10 +3,13 @@ const { cartRepository, goodsRepository } = require('./../Database');
 const {
     convertStringToDate,
     convertParticularTimeStringToDate,
-    RelativeOfCurrentDayAndScheduleDay
+    RelativeOfCurrentDayAndScheduleDay,
+    ValidatePassword
 } = require('./../Utils');
+const { PAYMENT_PUBLIC_KEY } = require('./../Config');
 
 const Schedule = require('./../Schedule');
+const { BAD_REQUEST } = require('../Constant/status-constant');
 const schedule = new Schedule();
 
 const shoppingMDW = {
@@ -100,6 +103,24 @@ const shoppingMDW = {
             schedule.expireCart(expireCookieDate, cart._id);
 
             req.cart = cart._id;
+            next();
+        } catch (err) {
+            res.status(status.BAD_REQUEST).json({
+                message: err.message
+            });
+        }
+    },
+    checkPayment: async (req, res, next) => {
+        try {
+            const { key } = req.query || '';
+            const cartId = req.cookies.cart || '';
+            const compareString = `${PAYMENT_PUBLIC_KEY}-${cartId}`;
+            const isPayment = await ValidatePassword(compareString, key);
+            if (!isPayment) {
+                throw new Error("Please, execute your payment !! don't use tricks with us, we got you", {
+                    cause: BAD_REQUEST
+                })
+            }
             next();
         } catch (err) {
             res.status(status.BAD_REQUEST).json({

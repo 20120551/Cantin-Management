@@ -28,7 +28,6 @@ class OrderController {
 
             res.cookie('order', waitingOrder.id, {
                 secure: false,
-                httpOnly: true,
                 sameSite: "strict",
                 expires: dateExpire
             });
@@ -41,8 +40,33 @@ class OrderController {
                 message: 'waiting for payment',
                 data: {
                     order,
-                    qrCode
                 }
+            })
+        } catch (err) {
+            next(err);
+        }
+    }
+    updateOrderState = async (req, res, next) => {
+        try {
+            const { orderId } = req.params;
+            const { state } = req.body;
+            const { order } = await orderService.updateOrderState(orderId, state);
+            res.status(status.OK).json({
+                message: 'update order state successfully',
+                data: order
+            })
+        } catch (err) {
+            next(err);
+        }
+    }
+    deleteOrder = async (req, res, next) => {
+        try {
+            const { orderId } = req.params;
+            const { order } = await orderService.deleteOrder(orderId);
+            res.clearCookie('order');
+            res.status(status.OK).json({
+                message: 'delete order successfully',
+                data: order
             })
         } catch (err) {
             next(err);
