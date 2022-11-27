@@ -117,6 +117,22 @@ const userService = {
             throw err;
         }
     },
+    // [GET] /api/v1/user/getAll
+    getAll: async() => {
+        try {
+            const users = await userRepository.getAll({});
+            if (!users) {
+                throw new Error('user does not exist', {
+                    cause: status.NOT_FOUND
+                })
+            }
+            return FormatData({
+                users: users
+            })
+        } catch(err) {
+            throw err;
+        }
+    },
     // [POST] /api/v1/user/profile
     updateProfile: async(id, updateData) => {
         try {

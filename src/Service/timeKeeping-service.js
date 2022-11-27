@@ -19,7 +19,7 @@ const timeKeepingService = {
     },
     check: async (info) => {
         try {
-
+            console.log(3)
             // thêm hàng
             const timeKeeping = await timeKeepingRepository.check(info);
 

@@ -7,6 +7,7 @@ class ScheduleController {
         try {
             //lấy thông tin hàng được gửi lên từ form
             const assignmentInfo = req.body;
+            console.log(assignmentInfo);
 
             // Tạo và thêm hàng hóa vào lưu trữ
             const assignment  = await scheduleService.assignment(assignmentInfo);

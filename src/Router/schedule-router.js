@@ -4,7 +4,7 @@ const { authorizationMDW } = require('./../Middleware');
 const router = express.Router();
 const scheduleController = new ScheduleController();
 
-router.get('/',authorizationMDW.checkUser, scheduleController.getAll);
+router.get('/', scheduleController.getAll);
 router.get('/month',authorizationMDW.checkUser, scheduleController.getMonth);
 router.get('/date',authorizationMDW.checkUser, scheduleController.getDate);
 router.post('/create',authorizationMDW.checkPermission, scheduleController.assignment);

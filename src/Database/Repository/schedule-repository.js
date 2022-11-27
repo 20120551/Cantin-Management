@@ -22,6 +22,7 @@ const scheduleRepository = {
             if (result === null)
             {
                 //generate assignment
+                assignmentDate = new Date(assignmentDate);
                 const assignment = new Assignment({
                     assignmentDate: assignmentDate,
                     shiftId: shiftId,

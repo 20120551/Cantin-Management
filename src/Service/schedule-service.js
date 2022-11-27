@@ -48,6 +48,7 @@ const scheduleService = {
         try {
 
             // thêm assignment
+            console.log(assignmentInfo);
             const assignment = await scheduleRepository.assignment({
                 assignmentDate: assignmentInfo.assignmentDate,
                 shiftId: assignmentInfo.shiftId,

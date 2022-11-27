@@ -29,6 +29,15 @@ const userRepository = {
             throw err;
         }
     },
+    getAll: async () => {
+        try {
+            const result = await User.find({}).populate('userType');
+            return result;
+        }
+        catch (err) {
+            throw err;
+        }
+    },
     findUserById: async (_id) => {
         try {
             const result = await User.findOne({ _id: _id });

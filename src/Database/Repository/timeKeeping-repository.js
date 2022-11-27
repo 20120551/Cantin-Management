@@ -4,7 +4,6 @@ const timeKeepingRepository = {
     // Tạo assignment mới
     getStaffTK: async (userId) => {
         try {
-            console.log(userId);
             const timeKeeping = await TimeKeeping.find({userId: userId})
                 .populate({
                     path: 'userId',
@@ -14,7 +13,7 @@ const timeKeepingRepository = {
                 }).populate({
                     path: 'workDays._id',
                     populate: {
-                        path: 'shiftId',
+                        path: 'shiftId userId',
                     }
                 })
                 .exec();
@@ -25,16 +24,19 @@ const timeKeepingRepository = {
     },
     check: async(info) => {
         try {
+            console.log(4);
+            console.log(info);
             const timeKeeping = await TimeKeeping.findOneAndUpdate({userId: info.userId}, {
                 $set: {
                     'workDays.$[elem].check': true
                 }
             }, {
                 arrayFilters: [{
-                    'elem._id': info.assignmentID
+                    'elem._id': info.assignmentId
                 }],
                 new: true
             });
+            console.log(timeKeeping);
             return timeKeeping;
         } catch(err) {
             throw err;

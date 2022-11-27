@@ -7,7 +7,7 @@ class TimeKeepingController {
     getStaffTK = async (req, res, next) => {
         try {
             //lấy thông tin hàng được gửi lên từ form
-            const userId = req.params.id;
+            const userId = req.user._id;
 
             // Tạo và thêm hàng hóa vào lưu trữ
             const timeKeeping = await timeKeepingService.getStaffTK(userId);
@@ -25,9 +25,10 @@ class TimeKeepingController {
     check = async(req, res, next) => {
         try {
             const info = req.body;
+            console.log(2)
             const {timeKeeping} = await timeKeepingService.check(info);
             res.status(status.OK).json({
-                message: 'get time keeping sucessfully',
+                message: 'Check time keeping sucessfully',
                 data: timeKeeping
             })
         } catch(err) {

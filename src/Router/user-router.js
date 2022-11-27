@@ -12,5 +12,6 @@ router.post('/change-password', authorizationMDW.checkUser, userController.verti
 router.get('/profile', authorizationMDW.checkUser, userController.getProfile)
 router.post('/profile', authorizationMDW.checkUser, userController.updateProfile);
 router.post('/logout', authorizationMDW.checkUser, userController.logout);
+router.get('/all',authorizationMDW.checkPermission, userController.getAll);
 
 module.exports = router;
