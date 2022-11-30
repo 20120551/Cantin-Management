@@ -16,6 +16,14 @@ function Header() {
         authDispatch(auth.logout());
         navigate('/login');
     }
+    const handleSchedule = () => {
+        authDispatch(auth.logout());
+        navigate('/schedule');
+    }
+    const handleTimekeeping = () => {
+        authDispatch(auth.logout());
+        navigate('/timekeeping');
+    }
     return (
         <header className="header">
             <div className="page home">
@@ -42,21 +50,36 @@ function Header() {
                         {toggle
                             ? <ul className="user-dropdown">
                                 <li>
-                                    <Link>Thông tin cá nhân</Link>
+                                    <Link to={"/profile"}>Thông tin cá nhân</Link>
                                 </li>
                                 <ProtectComponent allowRoles={[role.OWNER]}>
                                     <li>
-                                        <Link>Nhập hàng</Link>
+                                        <Link to={"/canteen"}>Quản lý món ăn</Link>
+                                    </li>
+                                    <li>
+                                        <Link to={"/warehouse"}>Quản lý kho</Link>
+                                    </li>
+                                    <li>
+                                        <Link to={"/employees"}>Nhân viên</Link>
+                                    </li>
+                                    <li>
+                                        <Link to={"/bussiness"}>Doanh thu</Link>
+                                    </li>
+                                    <li>
+                                        <Link onClick={handleSchedule}>Lịch làm việc</Link>
                                     </li>
                                 </ProtectComponent>
                                 <ProtectComponent allowRoles={[role.STAFF]}>
                                     <li>
-                                        <Link>Quản lý món ăn</Link>
+                                        <Link to={"/canteen"}>Quản lý món ăn</Link>
                                     </li>
                                     <li>
-                                        <Link>Lịch làm việc</Link>
+                                        <Link onClick={handleTimekeeping}>Lịch làm việc</Link>
                                     </li>
                                 </ProtectComponent>
+                                <li>
+                                    <Link to={"/login/forgotPw"}>Đổi mật khẩu</Link>
+                                </li>
                                 <li>
                                     <Link onClick={handleLogout}>Đăng xuất</Link>
                                 </li>

@@ -1,8 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
 import { ProtectRoute } from './components/authorization';
 import { role } from './config';
-import Login from './pages/login';
-import { HomeLayout, CartRoute, PaymentRoute, OrderRoute } from './routes';
+import { HomeLayout, CartRoute, PaymentRoute, OrderRoute, LoginRoute, 
+    ProfileRoute, EmployeesRoute, Canteen, 
+    Warehouse, BussinessRoute, ScheduleRoute, TimekeepingRoute } from './routes';
+import Home from './pages/home/index/home';
 
 function App() {
     return (
@@ -14,30 +16,42 @@ function App() {
                     <Route path='/payment/*' element={<PaymentRoute />} />
                     <Route element={<ProtectRoute />}>
                         <Route path='/order/*' element={<OrderRoute />} />
+                        <Route path='/timekeeping/*' element={<TimekeepingRoute />} />
+                        <Route path='/profile' element={<ProfileRoute/>} />
+                        <Route path='/canteen' element={<Canteen/>} />
                     </Route>
                     <Route element={<ProtectRoute allowRoles={[role.OWNER]} />}>
-                        <Route path='/create' element={<Create />} />
+                        <Route path='/employees/*' element={<EmployeesRoute />} />
+                        <Route path='/bussiness' element={<BussinessRoute />} />
+                        <Route path='/schedule/*' element={<ScheduleRoute />} />
+                    </Route>
+                    <Route element={<ProtectRoute allowRoles={[role.OWNER || role.STAFF]} />}>
+                        
+                       
+                        <Route path='/warehouse/*' element={<Warehouse/>} />
                     </Route>
                     <Route path='/unauthorized' element={<Unauthorization />} />
+                   
                 </Route>
-                <Route path='/login' element={<Login />} />
+                
+                <Route path='/login/*' element={<LoginRoute />} />
+                
+
             </Routes>
         </>
     )
 }
 
-function Create() {
-    return <h1>Create page</h1>
-}
+
 function Unauthorization() {
     return <h1>Unauthorization page</h1>
 }
-function Home() {
-    return (
-        <>
-            <h1>Home page</h1>
-        </>
-    )
-}
+// function Home() {
+//     return (
+//         <>
+//             <h1>Home page</h1>
+//         </>
+//     )
+// }
 
 export default App;

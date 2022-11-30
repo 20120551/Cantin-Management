@@ -1,3 +1,5 @@
+import { user } from './../../constant'
+
 const userInitialState = {
     username: '',
     password: ''
@@ -5,6 +7,8 @@ const userInitialState = {
 
 const userReducer = (state, action) => {
     switch (action.type) {
+        case user.GET_PROFILE:
+            return action.payload?.data
         default:
             return { ...state }
     }

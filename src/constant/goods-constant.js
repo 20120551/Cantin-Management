@@ -1,0 +1,1 @@
+export const GET_STORE_ROOM = 'GET_STORE_ROOM';
