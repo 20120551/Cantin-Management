@@ -99,8 +99,7 @@ class OrderController {
     orderResult = async (req, res, next) => {
         try {
             const { result } = req.params;
-            const cartId = req.cart || req.cookies.cart;
-            const orderId = req.cookies.order;
+            const { cartId, orderId } = req.shopping;
 
             this.paymentThirdParty.setState(this.paymentThirdParty[`${result}State`]);
             const payload = {

@@ -70,6 +70,7 @@ class CartController {
             const id = req.cart || req.cookies.cart;
             await cartService.removeCart(id);
             res.clearCookie("cart");
+            res.clearCookie('order');
 
             res.status(status.OK).json({
                 message: 'remove goods from cart successfully',

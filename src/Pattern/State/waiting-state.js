@@ -59,9 +59,27 @@ class WaitingState {
                     cause: status.BAD_REQUEST
                 })
             }
+
+            // tạo 1 order với trạng thái waiting
+            const {
+                timeReceive,
+                studentId,
+                studentName
+            } = data;
+
+            const _timeReceive = convertParticularTimeStringToDate(timeReceive);
+            const { order } = await orderService.createWaitingOrder(
+                {
+                    studentId,
+                    studentName
+                },
+                _timeReceive,
+                handledCart,
+            )
+
             // tạo 1 key bảo mật cho API thành công
             const salt = await GenerateSalt();
-            const hash = await GeneratePassword(`${PAYMENT_PUBLIC_KEY}-${cartId}`, salt);
+            const hash = await GeneratePassword(`${PAYMENT_PUBLIC_KEY}`, salt);
             // tạo 1 session chứa thông tin các sản phẩm thanh toán
             const session = await stripe.checkout.sessions.create({
                 payment_method_types: ['card'],
@@ -79,7 +97,7 @@ class WaitingState {
                     }
                 }),
                 expires_at: convertStringToDate(expire.UN_PAY),
-                success_url: `${domain}/success?session_id=${hash}`,
+                success_url: `${domain}/success?session_id=${hash}&&cart_id=${cartId}&&order_id=${order._id}`,
                 cancel_url: `${domain}/failure`,
             })
             // tạo QR code liên hết với ngân hàng thanh toán
@@ -90,24 +108,9 @@ class WaitingState {
                 })
             }
             const qrCode = await QRCode.toDataURL(url);
-            // tạo 1 order với trạng thái waiting
-            const {
-                timeReceive,
-                studentId,
-                studentName
-            } = data;
 
-            const _timeReceive = convertParticularTimeStringToDate(timeReceive);
-            const { order } = await orderService.createWaitingOrder(
-                {
-                    studentId,
-                    studentName
-                },
-                _timeReceive,
-                handledCart,
-                qrCode
-            )
-
+            order.qrCode = qrCode;
+            await order.save();
             // chuyển sang trạng thái pending đợi thanh toán
             this.paymentThirdParty.setState(this.paymentThirdParty.pendingState);
             return FormatData({ order, qrCode });

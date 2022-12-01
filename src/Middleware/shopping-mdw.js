@@ -112,15 +112,15 @@ const shoppingMDW = {
     },
     checkPayment: async (req, res, next) => {
         try {
-            const { key } = req.query || '';
-            const cartId = req.cookies.cart || '';
-            const compareString = `${PAYMENT_PUBLIC_KEY}-${cartId}`;
-            const isPayment = await ValidatePassword(compareString, key);
+            const { session_id, order_id, cart_id } = req.query || '';
+            const compareString = `${PAYMENT_PUBLIC_KEY}`;
+            const isPayment = await ValidatePassword(compareString, session_id);
             if (!isPayment) {
                 throw new Error("Please, execute your payment !! don't use tricks with us, we got you", {
                     cause: BAD_REQUEST
                 })
             }
+            req.shopping = { orderId: order_id, cartId: cart_id };
             next();
         } catch (err) {
             res.status(status.BAD_REQUEST).json({
