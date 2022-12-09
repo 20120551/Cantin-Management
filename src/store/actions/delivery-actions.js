@@ -1,12 +1,12 @@
-import { receive } from '../../constant';
+import { delivery } from '../../constant';
 
 export const getSaved = payload => ({
-    type: receive.GET_SAVED,
+    type: delivery.GET_SAVED,
     payload
 })
 
 export const addNote = payload => ({
-    type: receive.ADD_NOTE,
+    type: delivery.ADD_NOTE,
     payload
 })
 

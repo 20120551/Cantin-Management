@@ -6,41 +6,50 @@ import Employee from '../../../components/employee/emloyee';
 import Btn from '../../../components/Btn/Btn'
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-function Employees() {
-    const data = [
-        {
-            fullname: 'Nguyễn Văn A',
-            email: 'NguyenVanA@gmail.com',
-            phone: '0123456987',
-            address: 'TP. Thủ Đức',
-            schedule: 'T2, T3, T7',
-            salary: '3.000.000',
-            role: 'Thu ngân',
-        },
-        {
-            fullname: 'Nguyễn Văn A',
-            email: 'NguyenVanA@gmail.com',
-            phone: '0123456987',
-            address: 'TP. Thủ Đức',
-            schedule: 'T2, T3, T7',
-            salary: '3.000.000',
-            role: 'Thu ngân',
-        },
-    ]
+import { useEffect } from 'react';
 
+import { useUser } from '../../../hooks'
+import { user } from './../../../store/actions'
+import { userService } from './../../../services'
+
+function Employees() {
     const navigate = useNavigate();
+    const [userState, userDispatch] = useUser()
+    useEffect(() => {
+        userService.getAllUser()
+            .then((response) => userDispatch(user.getAllUser(response)))
+            .catch((err) => {
+                // thông báo lỗi ở đây
+                console.log(err)
+            })
+    }, [])
+    let data = userState.users;
+
 
     return ( 
         <div>
             <div className="w1200 mb-4">
-                <button type="button" class="btn-add d-flex justify-content-center align-items-center" onClick={()=>{navigate('/employees/create')}}>
+                <button type="button" className="btn-add d-flex justify-content-center align-items-center" onClick={()=>{navigate('/employees/create')}}>
                     <FontAwesomeIcon icon={faPlus} className="fs-5 create-employee-btn"/>
                     <div className="create-employee-text">Tạo mới</div>
                 </button> 
             </div>
-            {data.map(info => {
-                return Employee(info)
-            })}
+            {userState.length === 0
+            ? <div className="d-flex justify-content-center">
+                Danh sách rỗng
+            </div>
+            : <>
+            {data === undefined? <></>: data.map((info) => 
+                info.kind === '' ?
+                <></> :
+                <Employee 
+                    info={info}
+                    key={info._id}
+                />
+                )
+            }
+            </>}
+           
             
            
         </div>

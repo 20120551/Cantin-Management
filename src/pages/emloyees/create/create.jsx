@@ -9,9 +9,14 @@ import { useNavigate } from 'react-router-dom';
 import { faClose, faPlus, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 
+import { useUser } from '../../../hooks'
+import { user } from './../../../store/actions'
 import { userService } from './../../../services'
 
+
+
 function Create() {
+    const [userState, userDispatch] = useUser()
     const [isLoadImg,setIsLoadImg] = useState(false);
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
@@ -21,16 +26,21 @@ function Create() {
     const [password2, setPassword2] = useState('');
     const navigate = useNavigate()
     const handleAddStaff = () => {
+
         if(email !== '' && password === password2 && password !== '') {
             userService.signUp({
                 username: email,
                 password: password,
-                name: name,
-                address: address,
-                phone: phone,
             })
-            .then((response)=>console.log(response));
+            .then((response)=>{
+                userDispatch(user.addProfile(response))
+            })
+            .catch((err) => {
+                // thông báo lỗi ở đây
+                console.log(err)
+            });
         }
+        navigate('/employees')
     }
     return ( 
         <div>

@@ -5,3 +5,18 @@ export const getAllGoodsOnStoreRoom = payload => ({
     payload
 })
 
+export const updateGoods = payload => ({
+    type: goods.UPDATE_GOODS,
+    payload
+})
+
+export const addGoods = payload => ({
+    type: goods.ADD_GOODS,
+    payload
+})
+
+export const deleteGoods = payload => ({
+    type: goods.DELETE_GOODS,
+    payload
+})
+

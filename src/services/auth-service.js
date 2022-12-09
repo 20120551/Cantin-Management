@@ -1,4 +1,5 @@
 import axios from './../lib/axios';
+import { privateAxios } from './../lib/axios';
 
 export const login = async (username, password) => {
     try {
@@ -12,10 +13,10 @@ export const login = async (username, password) => {
     }
 }
 
-export const forgotPassword = async (email) => {
+export const forgotPassword = async ({username}) => {
     try {
-        const response = await axios.post('/auth/forgot-password', {
-            email,
+        const response = await privateAxios.put('/auth/forgot-password', {
+            username,
         })
         return response?.data;
     } catch (err) {
@@ -23,10 +24,21 @@ export const forgotPassword = async (email) => {
     }
 }
 
-export const verifyKey = async (key) => {
+export const verifyKey = async ({key}) => {
     try {
-        const response = await axios.post('/auth/verify-key', {
+        const response = await privateAxios.post('/auth/verify-key', {
             key,
+        })
+        return response?.data;
+    } catch (err) {
+        throw err;
+    }
+}
+
+export const resetPassword = async ({password}) => {
+    try {
+        const response = await privateAxios.post('/auth/forgot-password', {
+            password,
         })
         return response?.data;
     } catch (err) {

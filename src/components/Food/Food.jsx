@@ -85,12 +85,12 @@ function Food({
                 }
             })
     }
-
+    console.log(data)
     return (
             <div className="col-sm-6 col-md-6 col-lg-6 w-50 main-container">
                 <div className="food-card d-flex m-3">
                     <div className="food-card_img">
-                        <img src={"https://i.imgur.com/eFWRUuR.jpg"} alt=""/>
+                        <img src={data.image === "image"? "https://i.imgur.com/eFWRUuR.jpg" : data.image} alt=""/>
                     </div>
                     <div className="food-card_content flex-1">
                         <div className="food-card_title-section">

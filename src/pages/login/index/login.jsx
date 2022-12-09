@@ -19,7 +19,6 @@ function Login() {
     const handleLogin = async () => {
         try {
             const response = await authService.login(username, password);
-            
             authDispatch(auth.login(response.data));
             navigate('/');
         } catch (err) {

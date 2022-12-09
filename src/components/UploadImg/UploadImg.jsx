@@ -7,12 +7,27 @@ import { useState } from 'react';
 
 import storage from '../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
+import { useGoods } from '../../hooks'
+import { goods } from './../../store/actions'
+import { goodsService } from './../../services'
 
+import { useProfile } from '../../hooks'
+import { profile } from './../../store/actions'
+import { userService } from './../../services'
 
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
 
-function UploadImg() {
+function UploadImg({
+    type,
+    id,
+    ...props
+}) {
+
+    const [goodsState, goodsDispatch] = useGoods();
+    const [profileState, profileDispatch] = useProfile()
     const navigate = useNavigate()
     const [image, setImage] = useState(null);
     const [url, setUrl] = useState("");
@@ -48,13 +63,47 @@ function UploadImg() {
             () => {
                 // download url
                 getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                    console.log(url);
+                    // console.log(url);
                     setUrl(url);
                     setIsUpload(true);
                 });
             }
         );
     }
+    if(type == "food") {
+        goodsService.getGoodsByID({
+            goodsId: id
+        })
+            .then((response)=>console.log(response.data))
+    }
+
+    const handleSaveImage = () => {
+        if(type == "food") {
+            goodsService.updateGoodsByID({
+                goodsId: id,
+                image: url,
+            }).then((response)=>{
+                goodsDispatch(goods.updateGoods(response.data))
+                toastr.info(response.message, 'Success', {timeOut: 1000})
+            })
+        }
+        if(type == "person") {
+            userService.updateProfile({
+                image: url,
+            }).then((response)=>{
+                
+                profileDispatch(profile.updateProfile(response.data));
+                toastr.info(response.message, 'Success', {timeOut: 1000})
+            })
+            .catch((err) => {
+                // thông báo lỗi ở đây
+                console.log(err)
+            })
+        }
+        props.parentCallback(false)
+      
+    }
+
     
     return (
         <div>
@@ -71,7 +120,9 @@ function UploadImg() {
                 <div className="d-flex justify-content-end my-3">
                     <div className="cancel-btn" onClick={handleUpLoad}><Btn str="Tải lên"/></div>
                     {isUpload? 
-                    <div><Btn str="Lưu"/></div>
+                    <Link to={type == "food"? "/canteen" : "/profile"}
+                    onClick={handleSaveImage}><Btn str="Lưu"
+                    /></Link>
                     :<></>}
                 </div>
             </div>

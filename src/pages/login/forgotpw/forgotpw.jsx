@@ -1,21 +1,30 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { authService } from '../../../services';
 
 
 import './forgotpw.css';
 
 
-
 function ForgotPw() {
     const [errorMessages, setErrorMessages] = useState({});
+    const [username, setUsername] = useState('')
     const navigate = useNavigate()
     const handleForgot = async () => {
-        // try {
-            
-        // } catch (error) {
-        //     setErrorMessages({name:"email", message: errors.email});
-        // }
-        navigate("/login/resetpw")
+        // console.log(username)
+        if(username !== '') {
+          setErrorMessages({name:"email", message: "Vui lòng chờ"});
+          const response = await authService.forgotPassword({username:username});
+          
+          navigate("/login/resetpw")
+          console.log(response)
+        }
+        else {
+          setErrorMessages({name:"email", message: errors.email});
+        }
+        
+        
+        //navigate("/login/resetpw")
         //setErrorMessages({name:"email", message: errors.email});
       }
 
@@ -31,7 +40,8 @@ function ForgotPw() {
     const renderForm = (
         <div className="form">
             <div className="input-container">
-              <input type="text" name="uname" placeholder='Email hoặc số điện thoại' required />
+              <input type="text" name="uname" placeholder='Email hoặc số điện thoại' required 
+              onChange={(e)=>setUsername(e.target.value)}/>
               {renderErrorMessage("email")}
             </div>
             <div className="button-container">

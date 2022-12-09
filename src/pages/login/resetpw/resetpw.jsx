@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
+import { authService } from "../../../services";
 import './resetpw.css';
 
 
@@ -15,18 +15,13 @@ function ResetPw() {
   const [isPassCheckKey, setIsPassCheckKey] = useState(false);
 
   // Call API
-  const codeFromEmail = [
-    {
-      codename: "123",
-    },
-  ]
 
   const errors = {
     uname: "Email hoặc số điện thoại không hợp lệ",
     repass: "Mật khẩu không hợp lệ"
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     //Prevent page reload
     event.preventDefault();
 
@@ -38,6 +33,7 @@ function ResetPw() {
   
     if (userData) {
         setIsSubmitted(true);
+        const res = await authService.resetPassword({password:pass.value});
         navigate('/login')
     } else {
 
@@ -73,15 +69,16 @@ function ResetPw() {
     
   );
 
-  const handleCheckCode = (event) => {
+  const handleCheckCode = async (event) => {
     //Prevent page reload
     event.preventDefault();
 
     var { code } = document.forms[0];
-    
-    const userCode = codeFromEmail.find((c) => c.codename === code.value);
+
+    const response = await authService.verifyKey({key:code.value});
+    console.log(response)
     // Compare code info
-    if (userCode) {
+    if (response) {
       setIsPassCheckKey(true);
     } else {
       setErrorMessages({ name: "code", message: errors.code });
@@ -100,7 +97,9 @@ function ResetPw() {
             {renderErrorMessage("code")}
         </div>
         <div className="resendEmail">
-            <div className="resendEmailText"> Gửi lại mã</div>
+            <div className="resendEmailText" onClick={async e => {
+              navigate('/login/forgotpw')
+            }}> Gửi lại mã</div>
            
         </div>
         <div className="button-container">

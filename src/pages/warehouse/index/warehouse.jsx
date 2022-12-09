@@ -6,7 +6,7 @@ import 'bootstrap/js/dist/modal'
 
 import Item from '../../../components/warehouse/item/item';
 import ImportGoods from '../../../components/modal/importGoods/importGoods';
-
+import NewGoods from '../../../components/modal/newGoods/newGoods';
 import { useGoods } from '../../../hooks'
 import { goods } from './../../../store/actions'
 import { goodsService } from './../../../services'
@@ -16,34 +16,57 @@ import { receive } from './../../../store/actions'
 import { receiveService } from './../../../services'
 
 import { useEffect } from 'react';
+import { useState } from 'react';
 
 function Warehouse() {
-    // const [goodsState, goodsDispatch] = useGoods();
-    // useEffect(() => {
-    //     goodsService.getAllGoodsOnStoreRoom()
-    //         .then((response) => goodsDispatch(goods.getAllGoodsOnStoreRoom(response)))
-    //         .catch((err) => {
-    //             // thông báo lỗi ở đây
-    //             console.log(err)
-    //         })
-            
-    // }, [])
-    const [receiveState, receiveDispatch] = useReceive();
+    const [goodsState, goodsDispatch] = useGoods();
     useEffect(() => {
-        receiveService.getStoreRoom()
-            .then((response) => receiveDispatch(receive.getAllGoodsSaved(response)))
+        goodsService.getAllGoodsOnStoreRoom()
+            .then((response) => goodsDispatch(goods.getAllGoodsOnStoreRoom(response)))
             .catch((err) => {
                 // thông báo lỗi ở đây
                 console.log(err)
             })
             
     }, [])
-    const Data = receiveState;
+    
+    const Data = goodsState;
+    console.log(Data)
+    // Phân trang - Phân loại
+    const [currentPage, setCurrentPage] = useState(1);
+    const [typeFood, setTypeFood] = useState('Tất cả');
+    const itemPerPage = 10;
+    const data = goodsState.filter(d => d.type == 'sideDish')
+    const typelist = ['Tất cả', 'Món chính', 'Món phụ'];
+    
+    const chosePage = (e) => {
+        setCurrentPage(e.target.id);
+    }
+
+    const choseType = (e) => {
+        setTypeFood(e.target.id);
+    }
+
+
+    const indexOfLastNews = currentPage * itemPerPage;
+    const indexOfFirstNews = indexOfLastNews - itemPerPage;
+    const currentTodos = data.slice(indexOfFirstNews, indexOfLastNews);
+    const renderTodos = currentTodos.map((d,index)=> {
+        return d.type === "sideDish" 
+        ? <Item place="warehouse" key={index} props={d}/> 
+        : <></>
+   });
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(data.length / itemPerPage); i++) {
+      pageNumbers.push(i);
+    }
+    //----------------------------
     return ( 
         <div className="w1200">
             <div className="warehouse-header">
                 <div className="warehouse-title">Danh sách các món trong kho</div>
                 <div className="d-flex">
+                    <NewGoods title="Món mới" id="newGoods"/>
                     <ImportGoods title="Nhập hàng" id="importGoods"/>
                     <ImportGoods title="Xuất hàng" id="exportGoods"/>
                     
@@ -66,9 +89,31 @@ function Warehouse() {
                     ? <div className="d-flex justify-content-center my-3">
                         Kho rỗng
                     </div>
-                    : Data.map((d,index)=> {
-                        return <Item key={index} props={d}/>
-                   })}
+                    : renderTodos}
+                    {/* Phân trang */}
+                    <div className="pagination-custom d-flex justify-content-center w-100">
+                        <ul id="page-numbers" className="page-numbers">
+                            {
+                            pageNumbers.map(number => {
+                                if (currentPage == number) {
+                                return (
+                                    <li key={number} id={number} className="active">
+                                    {number}
+                                    </li>
+                                )
+                                }
+                                else {
+                                return (
+                                    <li key={number} id={number} onClick={chosePage}>
+                                    {number}
+                                    </li>
+                                )
+                                }
+                            })
+                            }
+                        </ul>
+                    </div>
+                    {/* -- */}
                 </div>
             </div>
         </div>

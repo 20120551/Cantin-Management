@@ -1,29 +1,26 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/js/dist/modal'
-import 'bootstrap/dist/js/bootstrap.bundle'
-import './importGoods.css'
+import 'bootstrap/js/dist/modal';
+import 'bootstrap/dist/js/bootstrap.bundle';
+import './newGoods.css';
 import { useState } from 'react';
 import { useReducer, useRef } from 'react';
-import { receiveService, deliveryService } from '../../../services';
-import NewGoods from '../newGoods/newGoods';
+import { receiveService } from '../../../services';
 
-import { useGoods } from '../../../hooks'
-import { goods } from './../../../store/actions'
+import { useGoods } from '../../../hooks';
+import { goods } from '../../../store/actions';
 import { goodsService } from '../../../services';
 
-import toastr from 'toastr'
-import 'toastr/build/toastr.min.css'
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
 const initState = {
     nameGoods: '',
-    idGoods: '',
     countGoods: '',
     priceGoods: '',
     listGoods: []
 }
 
 const SET_NAME = 'set_name';
-const SET_ID = 'set_id';
 const SET_COUNT = 'set_count';
 const SET_PRICE = 'set_price';
 const ADD_GOODS = 'add_goods';
@@ -32,12 +29,6 @@ const DELETE_GOODS = 'delete_goods'
 const setName = payload => {
     return {
         type: SET_NAME,
-        payload
-    }
-}
-const setId = payload => {
-    return {
-        type: SET_ID,
         payload
     }
 }
@@ -73,11 +64,6 @@ const reducer = (state, action) => {
                 ...state,
                 nameGoods: action.payload
             }
-        case SET_ID: 
-            return {
-                ...state,
-                idGoods: action.payload
-            }
         case SET_COUNT: 
             return {
                 ...state,
@@ -105,119 +91,120 @@ const reducer = (state, action) => {
     }
 }
 
-function ImportGoods({
+function NewGoods({
     title,
     id,
 }) {
     const [goodsState, goodsDispatch] = useGoods();
-    const [errorMess, setErrorMess] = useState('');
+    
     const [state, dispatch] = useReducer(reducer, initState);
 
     const inputRef = useRef()
     
-    const { nameGoods, countGoods, priceGoods, listGoods, idGoods } = state;
-
-    const goodsInWarehouse = goodsState.filter(g => g.type === "sideDish") 
+    const { nameGoods, countGoods, priceGoods, listGoods } = state;
+    
     const handleAddGoods = () => {
         if(nameGoods !== '' && countGoods !== '' && priceGoods !== '') 
         {
-            const getId = goodsInWarehouse.filter(g => g.name === nameGoods);
-            console.log(getId[0])
-            if(title === 'Xuất hàng') {
-                //Nếu số lượng trong kho < số lượng xuất
-                if(getId[0].goodsType.capacity < countGoods) {
-                    setErrorMess('Số lượng trong kho không đủ')
-                }
-                else {
-                    dispatch(addGoods({
-                        name: nameGoods,
-                        count: countGoods,
-                        price: priceGoods,
-                        id: getId[0]._id,
-                    }))
-                    dispatch(setName(''));
-                    dispatch(setCount(''));
-                    dispatch(setPrice(''));
-                    setErrorMess('')
-                }
-            }
-            else {
-                dispatch(addGoods({
-                    name: nameGoods,
-                    count: countGoods,
-                    price: priceGoods,
-                    id: getId[0]._id,
-                }))
-                dispatch(setName(''));
-                dispatch(setCount(''));
-                dispatch(setPrice(''));
-                setErrorMess('')
-            }
-           
-        }
-        else if(nameGoods === '') {
-            setErrorMess('Vui lòng chọn món')
-        }
-        else if(countGoods == '') {
-            setErrorMess('Vui lòng chọn số lượng')
-        }
-        else if(priceGoods == '') {
-            setErrorMess('Vui lòng chọn giá lượng')
+            dispatch(addGoods({
+                name: nameGoods,
+                count: countGoods,
+                price: priceGoods
+            }))
+            dispatch(setName(''));
+            dispatch(setCount(''));
+            dispatch(setPrice(''));
+    
+            inputRef.current.focus()
         }
         
     }
-
     const handleSave = () => {
-        if(title === 'Nhập hàng') {
+        if(title == 'Nhập hàng') {
             if(listGoods.length !== 0) {
-            const goodsArr = [];
-            listGoods.map(l => {
-                goodsArr.push({
-                    "goodsInfo": l.id,
-                    "quantity": l.count,
-                    "price": l.price,
-                })
-            })
-            receiveService.addNote({goods: goodsArr})
-                .then((response)=> {
-                    response.data.goods.map(g=>{
-                        goodsDispatch(goods.updateGoods(g.goodsInfo))
-                    })
-                    //goodsDispatch(goods.updateGoods())
-                    toastr.info(response.message, 'Success', {timeOut: 3000})
-                })
-                .catch((err) => {
+              receiveService.addNote({
+                goods: [{
+                    "goodsInfo": "637b84aba2ff532426888704",
+                    "quantity": "80",
+                    "price": "45000",
+                },
+                {
+                    "goodsInfo": "638e00cd3f6f1dc0a1b7feed",
+                    "quantity": "120",
+                    "price": "7500",
+                }],
+
+              })
+              .then((response)=> {
+                console.log(response);
+              })
+              .catch((err) => {
                 // thông báo lỗi ở đây
                 console.log(err)
-                })
-            
+            })
+            console.log('Nhập thành công')
             }
         }
-        if(title === 'Xuất hàng') {
+        if(title == 'Xuất hàng') {
+            listGoods.length !== 0 ? 
+            console.log('Xuất: ',listGoods)
+            : console.log('Danh sách rỗng')
+        }
+        if(title == 'Thêm món') {
             if(listGoods.length !== 0) {
-                const goodsArr = [];
-                listGoods.map(l => {
-                    goodsArr.push({
-                        "goodsInfo": l.id,
-                        "quantity": l.count,
-                        "price": l.price,
+                listGoods.map((g) => {
+                    goodsService.addGoods({
+                        name: g.name,
+                        image: 'https://i.imgur.com/eFWRUuR.jpg',
+                        price: g.price,
+                        product: g.count,
+                        type: 'mainDish',
+                        goodsType: {
+                            capacity: 0,
+                        }
                     })
-                })
-                deliveryService.addNote({goods: goodsArr})
-                    .then((response)=> {
-                        console.log(response)
-                        response.data.goods.map(g=>{
-                            goodsDispatch(goods.updateGoods(g.goodsInfo))
-                        })
-                        toastr.info(response.message, 'Success', {timeOut: 3000})
+                    .then((response) => {
+                        goodsDispatch(goods.addGoods(response.data));
+                        toastr.info(response.message, 'Success', {timeOut: 1000})
                     })
                     .catch((err) => {
-                    // thông báo lỗi ở đây
-                    console.log(err)
+                        // thông báo lỗi ở đây
+                        console.log(err)
                     })
-                
-                }
-        } 
+                })
+            }
+            else{
+                console.log('Danh sách rỗng')
+            } 
+        }
+        if(title == 'Món mới') {
+            if(listGoods.length !== 0) {
+                listGoods.map((g) => {
+                    goodsService.addGoods({
+                        name: g.name,
+                        image: 'https://i.imgur.com/eFWRUuR.jpg',
+                        price: g.price,
+                        product: 0,
+                        type: 'sideDish',
+                        goodsType: {
+                            capacity: 0,
+                        }
+                    })
+                    .then((response) => {
+                        goodsDispatch(goods.addGoods(response.data));
+                        toastr.info(response.message, 'Success', {timeOut: 1000})
+                    })
+                    .catch((err) => {
+                        // thông báo lỗi ở đây
+                        console.log(err)
+                    })
+                })
+            }
+            else{
+                console.log('Danh sách rỗng')
+            } 
+        }
+       
     }
 
     const renderList = listGoods.map((goods, index) => {
@@ -262,7 +249,6 @@ function ImportGoods({
                             <ol className="list-group list-group-numbered">
                                 {renderList}
                             </ol>
-                             
                             {/* Thêm món */}
                             <div className="accordion py-3" id="accordionExample">
                                 <div className="accordion-item">
@@ -276,18 +262,14 @@ function ImportGoods({
                                     <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                     <div className="accordion-body">
                                         <form onSubmit={(e)=>{e.preventDefault()}}>
-                                            <div class="row g-3">
-                                                <select class="form-select w-100 my-3" id="inputGroupSelect01"
+                                            <div className="row g-3">
+                                                <input type="text" className="form-control py-3 my-3" 
+                                                placeholder="Tên món" aria-label="First name" name="name"
+                                                ref={inputRef}
                                                 onChange={e=>{
-                                                    dispatch(setName(e.target.value))}}>
-                                                    <option value="" selected>Chọn món...</option>
-                                                    {goodsInWarehouse.map((g,index)=>{
-                                                        return (
-                                                            <option value={g.name}>{g.name}</option>
-                                                        )
-                                                    })}
-                                                    
-                                                </select>
+                                                    dispatch(setName(e.target.value));
+                                                }}
+                                                value={nameGoods} required/>
                                             </div>
                                             <div className="row g-3">
                                                 <input type="text" className="form-control py-3 my-3" 
@@ -295,7 +277,7 @@ function ImportGoods({
                                                 onChange={e=>{
                                                     dispatch(setCount(e.target.value));
                                                 }}
-                                                value={countGoods}/>
+                                                value={countGoods} required/>
                                             </div>
                                             <div className="row g-3">
                                                 <input type="text" className="form-control py-3 my-3" 
@@ -303,11 +285,7 @@ function ImportGoods({
                                                 onChange={e=>{
                                                     dispatch(setPrice(e.target.value));
                                                 }}
-                                                value={priceGoods}/>
-                                            </div>
-                                            <div className="row g-3 ">
-                                                <div className="form-control text-danger border-0 mt-0"> {errorMess}</div>
-                                               
+                                                value={priceGoods} required/>
                                             </div>
                                             <div className="row g-3">
                                                 <button type="submit" className="btn btn-light mx-0"
@@ -334,4 +312,4 @@ function ImportGoods({
     );
 }
 
-export default ImportGoods;
+export default NewGoods;

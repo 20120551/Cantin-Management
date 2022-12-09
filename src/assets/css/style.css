@@ -53,3 +53,7 @@ ul {
 .background-color-success {
     background-color: var(--success-color);
 }
+
+.font-weight-bold {
+    font-weight: bold;
+}

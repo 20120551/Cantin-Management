@@ -95,7 +95,7 @@
 
   .fogotPw-box{
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     margin: 10px;
     color: #01d28e;
   }

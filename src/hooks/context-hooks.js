@@ -1,5 +1,6 @@
 import { AuthContext, UserContext, CartContext,
-        GoodsContext, ScheduleContext, ReceiveContext } from './../store/context';
+        GoodsContext, ScheduleContext, ReceiveContext, 
+        ProfileContext, BussinessContext, DeliveryContext } from './../store/context';
 import { useContext } from 'react';
 
 export const useAuth = function () {
@@ -9,6 +10,11 @@ export const useAuth = function () {
 
 export const useUser = function () {
     const [state, dispatch] = useContext(UserContext);
+    return [state, dispatch];
+}
+
+export const useProfile = function () {
+    const [state, dispatch] = useContext(ProfileContext);
     return [state, dispatch];
 }
 
@@ -29,5 +35,16 @@ export const useSchedule = function () {
 
 export const useReceive = function () {
     const [state, dispatch] = useContext(ReceiveContext);
+    return [state, dispatch];
+}
+
+export const useDelivery = function () {
+    const [state, dispatch] = useContext(DeliveryContext);
+    return [state, dispatch];
+}
+
+
+export const useBussiness = function () {
+    const [state, dispatch] = useContext(BussinessContext);
     return [state, dispatch];
 }

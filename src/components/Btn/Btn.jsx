@@ -6,7 +6,7 @@ function Btn({
     str
 }) {
     return ( 
-        <button type="button" class="btnText d-flex justify-content-center align-items-center">
+        <button type="button" className="btnText d-flex justify-content-center align-items-center">
              {str}
         </button> 
     );

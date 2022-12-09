@@ -5,7 +5,7 @@ export const addNote = async ({
     goods,
 }) => {
     try {
-        const response = await privateAxios.post('receive/addNote', {
+        const response = await privateAxios.post('delivery/addNote', {
             goods,
         })
         return response?.data;
@@ -14,9 +14,9 @@ export const addNote = async ({
     }
 }
 
-export const getReceiveSaved = async () => {
+export const getDeliverySaved = async () => {
     try {
-        const response = await privateAxios.get('receive/saved')
+        const response = await privateAxios.get('delivery/saved')
         return response?.data;
     } catch (err) {
         throw err;

@@ -8,30 +8,41 @@ import 'bootstrap/dist/css/bootstrap.css';
 import avatar from '../../../assets/images/avatar_chu.jpg'
 import { useNavigate } from 'react-router-dom';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-import { useUser } from '../../../hooks'
-import { user } from './../../../store/actions'
+import { useProfile } from '../../../hooks'
+import { profile } from './../../../store/actions'
 import { userService } from './../../../services'
 
+import Change from '../../emloyees/change/change';
+
 function Profile() {
-    const [userState, userDispatch] = useUser()
+    const [profileState, profileDispatch] = useProfile()
+    const [isChange, setIsChange] = useState(false);
     useEffect(() => {
         userService.getProfile()
-            .then((response) => userDispatch(user.getProfile(response)))
+            .then((response) => profileDispatch(profile.getProfile(response)))
             .catch((err) => {
                 // thông báo lỗi ở đây
                 console.log(err)
             })
             
     }, [])
-    
-    console.log(userState)
-    const info = userState;
+    const info = profileState;
     const navigate = useNavigate();
-    
+    const handleChange = () => {
+        setIsChange(true)
+    }
+
+    const callbackFunction = (childData) => {
+        setIsChange(childData)
+    }
     return ( 
     <div>
+        {info.length === 0 
+        ? <>
+        </> 
+        : <>
         <ProtectComponent allowRoles={[role.OWNER]}>
             <div className="container mb-5 w1200 ">
                 <div className="row no-gutters">
@@ -75,16 +86,30 @@ function Profile() {
             </div>
         </ProtectComponent>
         <ProtectComponent allowRoles={[role.STAFF]}>
+            {isChange === true 
+            ? <>
+                <Change info={info} parentCallback={callbackFunction}/>
+            </>
+            : <>
             <div className="container w1200 user-card-full card">
                 <div className="row m-l-0 m-r-0">
-                    <div className="col-sm-4 bg-c-lite-green user-profile">
-                        <div className="card-block text-center text-white">
-                            <div className="m-b-25 m-t-10">
+                    <div className="col-sm-4 bg-c-lite-green user-profile pt-0">
+                        
+                        <div className=" text-center text-white">
+                            {/* <div className="m-b-25 m-t-10">
                                 
-                                <img className="avatar-img img-radius" src={avatar}></img>
+                                <img className="avatar-img " src={info.userType.image}/>
                             </div>
                             <h3 className="f-w-600">{info.username!==''?info.userType.fullName:''}</h3>
-                            <p className="text-uppercase">{info.kind}</p>
+                            <p className="text-uppercase">{info.kind}</p> */}
+                            
+                                <img src={info.userType.image} className="card-img-top  
+                                border-top-right-radius-0 border-bottom-left-radius-0" alt="..."/>
+                                <div className="card-body">
+                                    <h5 className="card-title text-uppercase">{info.kind}</h5>
+                                    <p className="card-text text-uppercase">{info.username!==''?info.userType.fullName:''}</p>
+                                </div>
+                            
                             
                         </div>
                     </div>
@@ -97,7 +122,7 @@ function Profile() {
                             
                             <div className="row" >
                                 <div className="col-sm-6">
-                                    <p class="m-b-10 f-w-600">Họ và tên</p>
+                                    <p className="m-b-10 f-w-600">Họ và tên</p>
                                     <h6 className="text-muted f-w-400">{info.username!==''?info.userType.fullName:''}</h6>
                                 </div>
                                 <div className="col-sm-6">
@@ -108,33 +133,37 @@ function Profile() {
                             <h6 className="m-b-20 m-t-40 p-b-5 b-b-default f-w-600"></h6>
                             <div className="row">
                                 <div className="col-sm-6">
-                                    <p class="m-b-10 f-w-600">Số điện thoại</p>
+                                    <p className="m-b-10 f-w-600">Số điện thoại</p>
                                     <h6 className="text-muted f-w-400">{info.phone}</h6>
                                 </div>
-                                <div class="col-sm-6">
-                                    <p class="m-b-10 f-w-600">Địa chỉ</p>
+                                <div className="col-sm-6">
+                                    <p className="m-b-10 f-w-600">Địa chỉ</p>
                                     <h6 className="text-muted f-w-400">{info.address}</h6>
                                 </div>
                             </div>
                             <h6 className="m-b-20 m-t-40 p-b-5 b-b-default f-w-600"></h6>
                             <div className="row">
                                 <div className="col-sm-6">
-                                    <p class="m-b-10 f-w-600">Lịch làm việc</p>
-                                    <h6 className="text-muted f-w-400','m-b-10">{info.schedule}</h6>
+                                    <p className="m-b-10 f-w-600">Giới tính</p>
+                                    <h6 className="text-muted f-w-400','m-b-10">{info.userType.sex}</h6>
                                 </div>
-                                <div className="col-sm-6">
-                                    <p class="m-b-10 f-w-600">Lương</p>
+                                {/* <div className="col-sm-6">
+                                    <p className="m-b-10 f-w-600">Lương</p>
                                 <h6 className="text-muted f-w-400','m-b-10"></h6>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="d-flex justify-content-end mt-3">
-                                <div><Btn str={"Sửa"}></Btn></div>
+                                <div onClick={handleChange}><Btn str={"Sửa"} ></Btn></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>         
+            </>}
         </ProtectComponent>
+        </>
+        }
+        
     </div>
           
     );

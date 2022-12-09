@@ -2,34 +2,37 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './employee.css'
 import 'bootstrap/dist/css/bootstrap.css';
-import { faFile, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faFile, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Change from '../../pages/emloyees/change/change';
 
 
 function Employee({
-    fullname,
-    email,
-    phone,
-    address,
-    schedule,
-    salary,
-    role,
+  info,
+  key
 }) {
     const navigate = useNavigate()
     const [isChange, setIsChange] = useState(false);
+    const callbackFunction = (childData) => {
+        setIsChange(childData)
+    }
     const handleChange = () => {
         //
-        navigate("/employees/change")
+        if(isChange === false) {
+            setIsChange(true)
+        }
+        else {
+            setIsChange(false)
+        }
+    }
+    const handleDelete = () => {
+        //
+        console.log('delete')
     }
     return ( 
         <div>
-            {/* {isChange? 
-            <div>
-                <div className="bg-container" onClick={()=>{setIsChange(false)}}></div>
-                
-            </div>
-            : <></>} */}
+           
             <div className="container w1200 user-card-full card">
                 <div className="row m-l-0 m-r-0">
                     <div className="col-sm-3 bg-c-lite-green user-profile">
@@ -41,24 +44,27 @@ function Employee({
                             <div className="m-b-20 b-b-default d-flex align-items-center justify-content-end">
                             </div>
                             <div className="row justify-content-between">
-                                <div className="col-sm-4 d-flex align-items-center">
-                                    <h6 className="text-muted f-w-400 mb0">{fullname}</h6>
+                                <div className="col-sm-2 d-flex align-items-center">
+                                    <h6 className="text-muted f-w-400 mb0">{info.userType.fullName}</h6>
                                 </div>
-                                <div className="col-sm-3 d-flex align-items-center">
-                                    <h6 className="text-muted f-w-400 mb0">{schedule}</h6>
+                                <div className="col-sm-4 d-flex align-items-center">
+                                    <h6 className="text-muted f-w-400 mb0">{info.username}</h6>
                                 </div>
                                 <div className="col-sm-3 d-flex align-items-center"> 
-                                    <h6 className="text-muted f-w-400 mb0">{salary + 'VNĐ'}</h6>
+                                    <h6 className="text-muted f-w-400 mb0">{info.userType.sex}</h6>
                                 </div>
 
-                                <FontAwesomeIcon icon={faPenToSquare} 
-                                className="col-sm-1 fs-4 faPenToSquare" onClick={()=>{handleChange()}}/>
+                                {/* <FontAwesomeIcon icon={faPenToSquare} 
+                                className="col-sm-1 fs-4 faPenToSquare" onClick={()=>{handleChange()}}/> */}
+                                <FontAwesomeIcon icon={faTrash} 
+                                className="col-sm-1 fs-4 faPenToSquare" onClick={()=>{handleDelete()}}/>
                             </div>
                             <h6 className="m-t-20 b-b-default f-w-600 mb0"></h6>
                         </div>
                     </div>
                 </div>
             </div>  
+            {isChange === true ? <Change info={info} parentCallback={callbackFunction}/> : <></> }
         </div>
           
      );
