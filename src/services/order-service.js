@@ -32,9 +32,14 @@ export const getOrderById = async ({ orderId }) => {
     }
 }
 
-export const getOrderResult = async ({ result, key }) => {
+export const getOrderResult = async ({ result, query }) => {
     try {
-        const response = await privateAxios.get(`/order/result/${result}?key=${key}`);
+        let queryString = '';
+        for (const [key, value] of Object.entries(query)) {
+            queryString += `${key}=${value}&&`;
+        }
+        queryString = queryString.slice(0, queryString.length - 2);
+        const response = await privateAxios.get(`/order/result/${result}?${queryString}`);
         return response?.data;
     } catch (err) {
         throw err;

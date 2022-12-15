@@ -45,7 +45,12 @@ function Header() {
                     <div className="user">
                         <div className="user-display" onClick={() => setToggle(!toggle)}>
                             <img src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png" />
-                            <p>Trần Vĩnh Phúc</p>
+                            <ProtectComponent allowRoles={[role.OWNER]} >
+                                <p>Chủ cửa hàng</p>
+                            </ProtectComponent>
+                            <ProtectComponent allowRoles={[role.STAFF]} >
+                                <p>Nhân viên</p>
+                            </ProtectComponent>
                         </div>
                         {toggle
                             ? <ul className="user-dropdown">
@@ -66,7 +71,7 @@ function Header() {
                                         <Link to={"/bussiness"}>Doanh thu</Link>
                                     </li>
                                     <li>
-                                        <Link onClick={handleSchedule}>Lịch làm việc</Link>
+                                        <Link to={"/schedule"}>Lịch làm việc</Link>
                                     </li>
                                 </ProtectComponent>
                                 <ProtectComponent allowRoles={[role.STAFF]}>
@@ -74,12 +79,12 @@ function Header() {
                                         <Link to={"/canteen"}>Quản lý món ăn</Link>
                                     </li>
                                     <li>
-                                        <Link onClick={handleTimekeeping}>Lịch làm việc</Link>
+                                        <Link to={"/timekeeping"}>Lịch làm việc</Link>
                                     </li>
                                 </ProtectComponent>
-                                <li>
+                                {/* <li>
                                     <Link to={"/login/forgotPw"}>Đổi mật khẩu</Link>
-                                </li>
+                                </li> */}
                                 <li>
                                     <Link onClick={handleLogout}>Đăng xuất</Link>
                                 </li>

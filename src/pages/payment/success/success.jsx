@@ -9,14 +9,19 @@ function PaySuccess() {
     const [order, setOrder] = useState({});
     const [searchParams] = useSearchParams();
 
-    const key = searchParams.get('session_id');
+    const session_id = searchParams.get('session_id');
+    const order_id = searchParams.get('order_id');
+    const cart_id = searchParams.get('cart_id');
     const navigate = useNavigate();
     useEffect(() => {
         const payload = {
-            key,
+            query: {
+                session_id,
+                order_id,
+                cart_id
+            },
             result: 'success'
         }
-        console.log(payload);
         orderService.getOrderResult(payload)
             .then((response) => {
                 setOrder(response?.data)

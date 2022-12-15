@@ -40,3 +40,12 @@ export const removeGoodsFromCart = async ({ goodsId }) => {
         throw err;
     }
 }
+
+export const removeCart = async () => {
+    try {
+        const response = await privateAxios.delete('/cart');
+        return response?.data;
+    } catch (err) {
+        throw err;
+    }
+}
