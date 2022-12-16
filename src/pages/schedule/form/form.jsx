@@ -96,13 +96,14 @@ function Form() {
         let assignmentDate = $('#start').val();
         scheduleService.createAssignment(assignmentDate,shiftId,userId)
             .then((response) => {
-                if(response.data.message!=='Add assignment successfully.')
+                console.log(response.data);
+                if(response.message!=='Add assignment successfully.')
                 {
-                    alert('Phân công thất bại, hãy thử lại.',response.data.message);
+                    alert('Phân công thất bại, hãy thử lại.',response.message);
                 }
                 else
                 {
-                    alert('Phân công thành công.',response.data.message);
+                    alert('Phân công thành công.',response.message);
                     navigate("./..");
                 }
             })
@@ -127,22 +128,24 @@ function Form() {
         usersList.push(<option key={i*11} value={users[i]._id}>{users[i].userType.fullName}</option>);
     }
 
-
     return (
         <div className='Form'>
             <form action="/action_page.php">
 
             <label htmlFor="users">Nhân viên</label>
+            <br></br>
                 <select id="users" name="users">
                     {usersList}
                 </select>
-
+                <br></br>
                 <label htmlFor="shift">Ca làm</label>
+                <br></br>
                 <select id="shift" name="shift">
                     {shiftsList}
                 </select>
-
+                <br></br>
                 <label htmlFor="start">Ngày làm việc</label>
+                <br></br>
                 <input type="date" id="start" name="trip-start"
                     value={date}
                     min={curDate} 

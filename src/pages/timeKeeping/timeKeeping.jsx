@@ -27,10 +27,22 @@ function getDateOfWeek(yw) {
     return new Date(date);
 }
 
+function getCurrentWeek()
+{
+    let currentDate = new Date();
+    let startDate = new Date(currentDate.getFullYear(), 0, 1);
+    var days = Math.floor((currentDate.getTime() - startDate.getTime() ) /
+        (24 * 60 * 60 * 1000));
+          
+    var weekNumber = Math.ceil(days / 7);
+    var year = currentDate.getFullYear();
+    return `${year}-W${weekNumber}`;
+}
+
 function Timekeeping() {
 
     const [timekeeping, setTimekeeping] = useState(null);
-    const [weekState, setWeek] = useState('2022-W47');
+    const [weekState, setWeek] = useState(getCurrentWeek());
 
     useEffect(() => {setWeek($('#week').val())}, []);
 
@@ -42,8 +54,6 @@ function Timekeeping() {
                 console.log(err)
             })
     }, [weekState])
-
-    console.log(timekeeping);
 
     return (
         <div id="schedule">
