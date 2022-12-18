@@ -14,9 +14,10 @@ function OrderItem({ currentItems }) {
     }, [currentItems])
 
     const changeOrderState = (orderId) => {
+        const order = currentItems.find((order) => order._id === orderId);
         const payload = {
             orderId,
-            state: 'received'
+            state: order.state === 'pending' ? 'success' : 'received'
         }
         orderService.changeOrderState(payload)
             .then((response) => {

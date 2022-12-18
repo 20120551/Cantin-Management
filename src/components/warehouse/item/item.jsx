@@ -78,7 +78,7 @@ function Item({
              {isLoadImg?
             (<div className="custom-input-img">
                 <FontAwesomeIcon icon={faClose} className="close-btn" onClick={()=>{setIsLoadImg(false)}}/>
-                <UploadImg id={props._id} type={"food"}/>
+                <UploadImg id={props._id} type={"food"} p={props}/>
             </div>) 
             : <></>}
             <div className="container w1200 user-card-full card">

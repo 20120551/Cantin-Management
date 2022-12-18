@@ -23,6 +23,7 @@ import 'toastr/build/toastr.min.css'
 function UploadImg({
     type,
     id,
+    p,
     ...props
 }) {
 
@@ -76,15 +77,19 @@ function UploadImg({
         })
             .then((response)=>console.log(response.data))
     }
+    console.log('id', id);
+    console.log('props', p);
 
     const handleSaveImage = () => {
         if(type == "food") {
+
             goodsService.updateGoodsByID({
                 goodsId: id,
                 image: url,
+                type: p.type
             }).then((response)=>{
                 goodsDispatch(goods.updateGoods(response.data))
-                toastr.info(response.message, 'Success', {timeOut: 1000})
+                toastr.warning(response.message, 'Success', {timeOut: 1000})
             })
         }
         if(type == "person") {
