@@ -49,7 +49,7 @@ const goodsRepository = {
             }
 
             // deep copy goodsType
-            Object.assign(goodsType, goodInfo.goodsType);
+            Object.assign(goodsType, goodInfo);
 
             await goodsType.save();
 

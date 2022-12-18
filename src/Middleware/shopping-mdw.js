@@ -4,7 +4,8 @@ const {
     convertStringToDate,
     convertParticularTimeStringToDate,
     RelativeOfCurrentDayAndScheduleDay,
-    ValidatePassword
+    ValidatePassword,
+    ValidateSignature,
 } = require('./../Utils');
 const { PAYMENT_PUBLIC_KEY } = require('./../Config');
 
@@ -15,6 +16,11 @@ const schedule = new Schedule();
 const shoppingMDW = {
     preventUserOnRushHour: async (req, res, next) => {
         try {
+            const isAuthentication = ValidateSignature(req);
+            if (isAuthentication) {
+                return next();
+            };
+
             // lấy thời gian hiện tại
             const currentTime = new Date();
 
@@ -24,6 +30,7 @@ const shoppingMDW = {
             // khởi tạo 2 mốc
             let startcloseStoreTime = convertParticularTimeStringToDate(startCloseStore);
             let endcloseStoreTime = convertParticularTimeStringToDate(endCloseStore);
+
             // kiểm tra xem thời gian lên lịch là của ngày cũ hay ngày mới
             if (RelativeOfCurrentDayAndScheduleDay(endcloseStoreTime)) {
                 // kiểm tra từ 0h00 - 7h30
@@ -32,6 +39,7 @@ const shoppingMDW = {
                 // kiểm tra từ 19h30 - 23h59
                 endcloseStoreTime = convertParticularTimeStringToDate('23h59m');
             }
+
             console.log(startcloseStoreTime, endcloseStoreTime, currentTime)
             // lấy ngày hôm sau, sau đó set lại lúc 7h30
             if (currentTime > startcloseStoreTime && currentTime < endcloseStoreTime) {
