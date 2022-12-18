@@ -16,6 +16,9 @@ import { userService } from './../../../services'
 
 import Change from '../../emloyees/change/change';
 
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
+
 function Profile() {
     const [profileState, profileDispatch] = useProfile()
     const [isChange, setIsChange] = useState(false);
@@ -24,7 +27,7 @@ function Profile() {
             .then((response) => profileDispatch(profile.getProfile(response)))
             .catch((err) => {
                 // thông báo lỗi ở đây
-                console.log(err)
+                toastr.warning(err, 'Error', {timeOut: 1000})
             })
             
     }, [])

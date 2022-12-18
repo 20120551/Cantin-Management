@@ -14,7 +14,8 @@ import { user } from './../../../store/actions'
 import { userService } from './../../../services'
 
 
-
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
 function Create() {
     const [userState, userDispatch] = useUser()
     const [isLoadImg,setIsLoadImg] = useState(false);
@@ -38,6 +39,7 @@ function Create() {
             .catch((err) => {
                 // thông báo lỗi ở đây
                 console.log(err)
+                toastr.warning(err, 'Error', {timeOut: 1000})
             });
         }
         navigate('/employees')

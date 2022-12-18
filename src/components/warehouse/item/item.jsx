@@ -41,6 +41,7 @@ function Item({
                 name: name,
                 price: price,
                 product: product,
+                type: props.type
     
             }).then((response)=>{
                 goodsDispatch(goods.updateGoods(response.data))

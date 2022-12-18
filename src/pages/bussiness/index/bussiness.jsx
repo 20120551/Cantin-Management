@@ -27,6 +27,10 @@ import HistoryItem from '../../../components/bussiness/item/historyItem';
 import RevenueItem from '../../../components/bussiness/item/revenueItem';
 import StatisticItem from '../../../components/bussiness/item/statisticItem';
 
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
+
+
 function Bussiness() {
     const [receiveState, receiveDispath] = useReceive();
     const [deliveryState, deliveryDispath] = useDelivery();
@@ -44,6 +48,7 @@ function Bussiness() {
             .catch((err) => {
         // thông báo lỗi ở đây
             console.log(err)
+            toastr.warning(err, 'Success', {timeOut: 1000})
         });
         deliveryService.getDeliverySaved()
             .then((res)=>{
@@ -52,6 +57,7 @@ function Bussiness() {
             .catch((err) => {
         // thông báo lỗi ở đây
             console.log(err)
+            toastr.warning(err, 'Error', {timeOut: 1000})
         });
         bussinessService.searchRevenue({
             startDate: startDate,
@@ -61,6 +67,7 @@ function Bussiness() {
             setRevenue(res.data)
         }).catch((err)=>{
             console.log(err)
+            toastr.warning(err, 'Error', {timeOut: 1000})
         });
         bussinessService.searchStatistic({
             startDate: startDate,
@@ -70,6 +77,7 @@ function Bussiness() {
             setStatistic(res.data)
         }).catch((err)=>{
             console.log(err)
+            toastr.warning(err, 'Error', {timeOut: 1000})
         });
 
     }, [])

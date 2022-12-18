@@ -10,6 +10,9 @@ import { goods } from './../../../store/actions'
 import { goodsService } from './../../../services'
 import { useEffect } from 'react';
 
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
+
 function Home() {
     const [goodsState, goodsDispatch] = useGoods();
     useEffect(() => {
@@ -18,7 +21,7 @@ function Home() {
             .then((response) => goodsDispatch(goods.getAllGoodsOnStoreRoom(response)))
             .catch((err) => {
                 // thông báo lỗi ở đây
-                console.log(err)
+                toastr.warning(err, 'Error', {timeOut: 1000})
             })
             
     }, [])

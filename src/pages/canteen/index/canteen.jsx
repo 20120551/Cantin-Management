@@ -13,6 +13,9 @@ import { goodsService } from './../../../services'
 import { useEffect } from 'react';
 import { useState } from 'react';
 
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
+
 function Canteen() {
     const [goodsState, goodsDispatch] = useGoods();
     useEffect(() => {
@@ -20,7 +23,7 @@ function Canteen() {
             .then((response) => goodsDispatch(goods.getAllGoodsOnStoreRoom(response)))
             .catch((err) => {
                 // thông báo lỗi ở đây
-                console.log(err)
+                toastr.warning(err, 'Success', {timeOut: 1000})
             })
             
     }, [])

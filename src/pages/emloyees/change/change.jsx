@@ -41,6 +41,7 @@ function Change( props ) {
                 .catch((err) => {
                     // thông báo lỗi ở đây
                     console.log(err)
+                    toastr.warning(err, 'Error', {timeOut: 1000})
                 })
             props.parentCallback(false)
         }  

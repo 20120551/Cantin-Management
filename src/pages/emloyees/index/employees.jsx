@@ -12,6 +12,9 @@ import { useUser } from '../../../hooks'
 import { user } from './../../../store/actions'
 import { userService } from './../../../services'
 
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
+
 function Employees() {
     const navigate = useNavigate();
     const [userState, userDispatch] = useUser()
@@ -20,7 +23,7 @@ function Employees() {
             .then((response) => userDispatch(user.getAllUser(response)))
             .catch((err) => {
                 // thông báo lỗi ở đây
-                console.log(err)
+                toastr.warning(err, 'Error', {timeOut: 1000})
             })
     }, [])
     let data = userState.users;
