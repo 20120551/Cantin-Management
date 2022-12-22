@@ -1,5 +1,6 @@
 import axios from "axios";
-const API_URL = 'http://localhost:8800/api/v1/';
+// const API_URL = 'http://localhost:8800/api/v1/';
+const API_URL = 'https://backend-nhom26-2020.onrender.com';
 const accessToken = JSON.parse(localStorage.getItem('accessToken'));
 
 // đây là axios cho phép gửi cookie/accessToken lên server
