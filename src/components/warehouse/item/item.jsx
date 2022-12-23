@@ -54,7 +54,6 @@ function Item({
     }
 
     const handleDelete = () => {
-        console.log(props._id)
         goodsService.deleteGoodsByID({
             goodsId: props._id
         })
@@ -64,7 +63,7 @@ function Item({
             })
             .catch((err) => {
                 // thông báo lỗi ở đây
-                console.log(err)
+                toastr.warning(err, 'Error', {timeOut: 2000})
             })
         
     }

@@ -12,6 +12,7 @@ import { goodsService } from './../../services'
 import { useNavigate } from 'react-router-dom';
 import toastr from 'toastr'
 import 'toastr/build/toastr.min.css'
+//toastr.warning(err, 'Error', {timeOut: 2000})
 function Food({
     key,
     data,
@@ -45,12 +46,11 @@ function Food({
                         .catch(err => {
                             // thông báo lỗi ở đây
                             //toastr.error(`${err.response.data.message}`, 'Sorry!');
-                            console.log(err);
+                            toastr.warning(err, 'Error', {timeOut: 2000})
                         })
                     
                 }
                 else {
-                    console.log('thêm thất bại')
                     toastr.error('Vui lòng chọn số lượng', 'Sorry!',{timeOut: 1000});
                     setCount(0);
                 }
@@ -73,19 +73,20 @@ function Food({
                         })
                         .catch(err => {
                             // thông báo lỗi ở đây
-                            console.log(err);
+
+                            toastr.warning(err, 'Error', {timeOut: 2000})
                         })
-                    console.log('thêm thành công')
+                    toastr.info('Thêm thành công', 'Note', {timeOut: 2000})
                     setCount(0);
                     navigate("/cart")
                 }
                 else {
-                    console.log('thêm thất bại')
+                    toastr.warning(err, 'Error', {timeOut: 2000})
                     setCount(0);
                 }
             })
     }
-    console.log(data)
+
     return (
             <div className="col-sm-6 col-md-6 col-lg-6 w-50 main-container">
                 <div className="food-card d-flex m-3">

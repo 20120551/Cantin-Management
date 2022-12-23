@@ -59,7 +59,7 @@ function UploadImg({
                 setPercent(percent);
             },
             (error) => {
-                console.log(error);
+                toastr.warning(err, 'Error', {timeOut: 2000})
             },
             () => {
                 // download url
@@ -102,7 +102,7 @@ function UploadImg({
             })
             .catch((err) => {
                 // thông báo lỗi ở đây
-                console.log(err)
+                toastr.warning(err, 'Error', {timeOut: 2000})
             })
         }
         props.parentCallback(false)

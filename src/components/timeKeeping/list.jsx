@@ -9,6 +9,9 @@ import { Assignment1 } from './../../components';
 import { useNavigate } from 'react-router-dom';
 import $ from 'jquery';
 
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
+
 function compareDate(date1,date2){
     if (Math.abs(date1.getTime()-date2.getTime())<=25200000)
     {
@@ -53,7 +56,7 @@ function ListAsignment(props) {
             .then((response) => setData(response.data.timeKeeping[0].workDays))
             .catch((err) => {
                 // thông báo lỗi ở đây
-                console.log(err)
+                toastr.warning(err, 'Error', {timeOut: 2000})
             })
     }, [])
 

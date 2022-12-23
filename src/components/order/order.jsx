@@ -2,6 +2,9 @@ import './../../assets/css/style.css';
 import './order.css';
 import { orderService } from './../../services';
 import { useEffect, useState } from 'react';
+
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
 const mapState = {
     success: "Thanh toán",
     pending: "Chờ thanh toán",
@@ -28,7 +31,7 @@ function OrderItem({ currentItems }) {
             })
             .catch((err) => {
                 // xử lý lỗi ở đây
-                console.log(err);
+                toastr.warning(err, 'Error', {timeOut: 2000})
             })
     }
     return (

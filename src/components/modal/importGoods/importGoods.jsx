@@ -122,7 +122,6 @@ function ImportGoods({
         if(nameGoods !== '' && countGoods !== '' && priceGoods !== '') 
         {
             const getId = goodsInWarehouse.filter(g => g.name === nameGoods);
-            console.log(getId[0])
             if(title === 'Xuất hàng') {
                 //Nếu số lượng trong kho < số lượng xuất
                 if(getId[0].goodsType.capacity < countGoods) {
@@ -188,7 +187,7 @@ function ImportGoods({
                 })
                 .catch((err) => {
                 // thông báo lỗi ở đây
-                console.log(err)
+                toastr.warning(err, 'Error', {timeOut: 2000})
                 })
             
             }
@@ -205,7 +204,6 @@ function ImportGoods({
                 })
                 deliveryService.addNote({goods: goodsArr})
                     .then((response)=> {
-                        console.log(response)
                         response.data.goods.map(g=>{
                             goodsDispatch(goods.updateGoods(g.goodsInfo))
                         })
@@ -213,7 +211,7 @@ function ImportGoods({
                     })
                     .catch((err) => {
                     // thông báo lỗi ở đây
-                    console.log(err)
+                    toastr.warning(err, 'Error', {timeOut: 2000})
                     })
                 
                 }

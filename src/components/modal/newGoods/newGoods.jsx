@@ -136,13 +136,13 @@ function NewGoods({
 
               })
               .then((response)=> {
-                console.log(response);
+
               })
               .catch((err) => {
                 // thông báo lỗi ở đây
-                console.log(err)
+                toastr.warning(err, 'Error', {timeOut: 2000})
             })
-            console.log('Nhập thành công')
+            toastr.warning(err, 'Error', {timeOut: 2000})
             }
         }
         if(title == 'Xuất hàng') {
@@ -169,12 +169,12 @@ function NewGoods({
                     })
                     .catch((err) => {
                         // thông báo lỗi ở đây
-                        console.log(err)
+                        toastr.warning(err, 'Error', {timeOut: 2000})
                     })
                 })
             }
             else{
-                console.log('Danh sách rỗng')
+                toastr.warning(err, 'Error', {timeOut: 2000})
             } 
         }
         if(title == 'Món mới') {
@@ -196,12 +196,12 @@ function NewGoods({
                     })
                     .catch((err) => {
                         // thông báo lỗi ở đây
-                        console.log(err)
+                        toastr.warning(err, 'Error', {timeOut: 2000})
                     })
                 })
             }
             else{
-                console.log('Danh sách rỗng')
+                toastr.warning(err, 'Error', {timeOut: 2000})
             } 
         }
        

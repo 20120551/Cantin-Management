@@ -6,6 +6,9 @@ import { useCart } from './../../hooks';
 import { cart } from './../../store/actions';
 import { cartService } from './../../services';
 
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
+
 function CartItem({ isApprove, cartItem }) {
     const {
         quantity,
@@ -18,6 +21,7 @@ function CartItem({ isApprove, cartItem }) {
     const increaseQuantity = () => {
         const increase = product + 1;
         if (increase > goods.product) {
+            toastr.info('Your goods quantity greater than our product on selling', 'Note', {timeOut: 2000})
             return console.log('Your goods quantity greater than our product on selling');
         }
         setProduct(product + 1);
@@ -25,6 +29,7 @@ function CartItem({ isApprove, cartItem }) {
     const decreaseQuantity = () => {
         const decrease = product - 1;
         if (decrease < 0) {
+            toastr.info('Your goods quantity less than 0', 'Note', {timeOut: 2000})
             return console.log('Your goods quantity less than 0');
         }
         setProduct(product - 1);
@@ -39,7 +44,7 @@ function CartItem({ isApprove, cartItem }) {
                 .then(() => cartDispatch(cart.updateGoodsOnCart(payload)))
                 .catch(err => {
                     // thông báo lỗi ở đây
-                    console.log(err)
+                    toastr.warning(err, 'Error', {timeOut: 2000})
                 })
         }
         setIsUpdate(!isUpdate);
@@ -49,7 +54,7 @@ function CartItem({ isApprove, cartItem }) {
             .then(() => cartDispatch(cart.removeGoodsFromCart({ goodsId: goods._id })))
             .catch(err => {
                 // thông báo lỗi ở đây
-                console.log(err)
+                toastr.warning(err, 'Error', {timeOut: 2000})
             })
     }
     return (

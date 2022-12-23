@@ -6,7 +6,8 @@ import { useSchedule } from './../../hooks';
 import { schedule } from './../../store/actions';
 import { timeKeepingService } from './../../services';
 import { useNavigate } from 'react-router-dom';
-
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
 function Assignment(props) {
     const {
         _id,
@@ -28,7 +29,7 @@ function Assignment(props) {
             .then((response) => setCheck(true))
             .catch((err) => {
                 // thông báo lỗi ở đây
-                console.log(err)
+                toastr.warning(err, 'Error', {timeOut: 2000})
             });
         console.log(1);
     }
