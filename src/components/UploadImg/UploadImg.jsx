@@ -37,9 +37,9 @@ function UploadImg({
     const [percent, setPercent] = useState(0);
 
     const handleChange = e => {
-        if(e.target.files[0]) {
+        if (e.target.files[0]) {
             setImage(e.target.files[0]);
-            if(image!= null) {
+            if (image != null) {
                 handleUpLoad();
             }
         }
@@ -47,19 +47,19 @@ function UploadImg({
 
     const handleUpLoad = () => {
         const storageRef = ref(storage, `/files/${image.name}`);
-        const uploadTask = uploadBytesResumable(storageRef,image)
+        const uploadTask = uploadBytesResumable(storageRef, image)
         uploadTask.on(
             "state_changed",
             (snapshot) => {
                 const percent = Math.round(
                     (snapshot.bytesTransferred / snapshot.totalBytes) * 100
                 );
- 
+
                 // update progress
                 setPercent(percent);
             },
             (error) => {
-                toastr.warning(err, 'Error', {timeOut: 2000})
+                toastr.warning(error, 'Error', { timeOut: 2000 })
             },
             () => {
                 // download url
@@ -71,45 +71,45 @@ function UploadImg({
             }
         );
     }
-    if(type == "food") {
+    if (type == "food") {
         goodsService.getGoodsByID({
             goodsId: id
         })
-            .then((response)=>console.log(response.data))
+            .then((response) => console.log(response.data))
     }
     console.log('id', id);
     console.log('props', p);
 
     const handleSaveImage = () => {
-        if(type == "food") {
+        if (type == "food") {
 
             goodsService.updateGoodsByID({
                 goodsId: id,
                 image: url,
                 type: p.type
-            }).then((response)=>{
+            }).then((response) => {
                 goodsDispatch(goods.updateGoods(response.data))
-                toastr.warning(response.message, 'Success', {timeOut: 1000})
+                toastr.warning(response.message, 'Success', { timeOut: 1000 })
             })
         }
-        if(type == "person") {
+        if (type == "person") {
             userService.updateProfile({
                 image: url,
-            }).then((response)=>{
-                
+            }).then((response) => {
+
                 profileDispatch(profile.updateProfile(response.data));
-                toastr.info(response.message, 'Success', {timeOut: 1000})
+                toastr.info(response.message, 'Success', { timeOut: 1000 })
             })
-            .catch((err) => {
-                // thông báo lỗi ở đây
-                toastr.warning(err, 'Error', {timeOut: 2000})
-            })
+                .catch((err) => {
+                    // thông báo lỗi ở đây
+                    toastr.warning(err, 'Error', { timeOut: 2000 })
+                })
         }
         props.parentCallback(false)
-      
+
     }
 
-    
+
     return (
         <div>
             <div className="bg-container"></div>
@@ -118,17 +118,17 @@ function UploadImg({
                 <div className="d-flex justify-content-between align-items-center 
                 flex-column">
                     <input type="file" className="form-control myinput"
-                    onChange={handleChange}></input>
+                        onChange={handleChange}></input>
                     <p className="mb-0">Vui lòng chờ: {percent}%</p>
                 </div>
-                <img src={url || "http://via.placeholder.com/300"} alt="firebase-image" className="img"/>  
+                <img src={url || "http://via.placeholder.com/300"} alt="firebase-image" className="img" />
                 <div className="d-flex justify-content-end my-3">
-                    <div className="cancel-btn" onClick={handleUpLoad}><Btn str="Tải lên"/></div>
-                    {isUpload? 
-                    <Link to={type == "food"? "/canteen" : "/profile"}
-                    onClick={handleSaveImage}><Btn str="Lưu"
-                    /></Link>
-                    :<></>}
+                    <div className="cancel-btn" onClick={handleUpLoad}><Btn str="Tải lên" /></div>
+                    {isUpload ?
+                        <Link to={type == "food" ? "/canteen" : "/profile"}
+                            onClick={handleSaveImage}><Btn str="Lưu"
+                            /></Link>
+                        : <></>}
                 </div>
             </div>
         </div>
